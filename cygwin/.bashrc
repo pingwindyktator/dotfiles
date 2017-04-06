@@ -75,15 +75,16 @@ shopt -s nocaseglob
 # Whenever displaying the prompt, write the previous line to disk
 # export PROMPT_COMMAND="history -a"
 
-# Main code directory
+# Main source code dir
 src=""
 
-# Some people use a different file for aliases
 if [ -f "${HOME}/.bash_aliases" ]; then
   source "${HOME}/.bash_aliases"
 fi
 
-
+if [ -f "${HOME}/.bash_funcs" ]; then
+  source "${HOME}/.bash_funcs"
+fi
 
 if [ -f "${HOME}/.vs_for_bash" ]; then
   source "${HOME}/.vs_for_bash"
@@ -95,15 +96,6 @@ fi
 # umask 027
 # Paranoid: neither group nor others have any perms:
 # umask 077
-
-winps () {
-    export PS1="\[\e[34m\][\[\e[m\]\[\e[34m\]\A\[\e[m\]\[\e[34m\]] \[\e[m\]\[\e[32m\]\u\[\e[m\]:\[\e[33m\]\`cwd\`\[\e[m\]\[\e[32m\]\`\`\[\e[m\]\\$ "
-    
-}
-
-cygps () {
-    export PS1="\[\e[34m\][\[\e[m\]\[\e[34m\]\A\[\e[m\]\[\e[34m\]] \[\e[m\]\[\e[32m\]\u\[\e[m\]:\[\e[33m\]\w\[\e[m\]\[\e[32m\]\`\`\[\e[m\]\\$ "
-}
 
 
 export PS1="\[\e[34m\][\[\e[m\]\[\e[34m\]\A\[\e[m\]\[\e[34m\]] \[\e[m\]\[\e[32m\]\u\[\e[m\]:\[\e[33m\]\w\[\e[m\]\[\e[32m\]\`\`\[\e[m\]\\$ "
