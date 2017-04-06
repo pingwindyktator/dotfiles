@@ -107,32 +107,32 @@ __vs_help () {
 
 __vs_test () {
     __vs_test_mode=true
-    [[ "$(__vs_build a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_build a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(__vs_rebuild a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs build a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs build a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs build a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs build a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs b a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs b a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs b a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs b a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs r a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs r a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs r a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs r a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
     __vs_test_mode=false
 }
 
 vs () {
     case "$1" in
-        build)     __vs_build "$2" "$3" "$4"   ;;
+        build|b)     __vs_build "$2" "$3" "$4"   ;;
 
-        rebuild)   __vs_rebuild "$2" "$3" "$4" ;;
+        rebuild|r)   __vs_rebuild "$2" "$3" "$4" ;;
 
-        clean)     __vs_clean "$2"             ;;
+        clean|c)     __vs_clean "$2"             ;;
 
         help)      __vs_help                   ;;
 
