@@ -1,1 +1,130 @@
+#!/bin/bash
 
+alias vsvars32='/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/Common7/Tools/vsvars32.bat'
+alias devenv='/c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio\ 14.0/Common7/IDE/devenv.com'
+alias beep='rundll32 user32.dll,MessageBeep'
+declare -A shortcuts=(
+                     )
+
+__vs_test_mode=false
+
+__vs_build () {
+    local proj configuration platform
+    proj="$1"
+    for s in ${!shortcuts[@]}; do
+        [[ "$1" == "$s" ]] && proj=${shortcuts["$s"]}
+    done
+
+    case "$2" in
+        debug|deb|Debug|d)                   configuration="Debug"         ;;
+        release|rel|Release|r)               configuration="Release"       ;;
+        staticdebug|sdeb|StaticDebug|sd)     configuration="StaticDebug"   ;;
+        staticrelease|srel|StaticRelease|sr) configuration="StaticRelease" ;;
+        "")                                  configuration="Debug"         ;;
+        *)                                   configuration="$2"            ;;
+    esac
+    case "$3" in
+        win32|Win32|w32)       platform="Win32"            ;;
+        any|Any)               platform="Any CPU"          ;;
+        mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
+        x64)                   platform="x64"              ;;
+        "")                    platform="Win32"            ;;
+        *)                     platform="$3"               ;;
+    esac
+
+    proj=$(cygpath -aw "$proj")
+
+    if [[ $__vs_test_mode == true ]]; then
+        echo $proj $configuration $platform
+    else
+        vsvars32
+        time devenv "$proj" /Build "$configuration|$platform"
+    fi
+}
+
+__vs_rebuild () {
+    local proj configuration platform
+    proj="$1"
+    for s in ${!shortcuts[@]}; do
+        [[ "$1" == "$s" ]] && proj=${shortcuts["$s"]}
+    done
+
+    case "$2" in
+        debug|deb|Debug|d)                   configuration="Debug"         ;;
+        release|rel|Release|r)               configuration="Release"       ;;
+        staticdebug|sdeb|StaticDebug|sd)     configuration="StaticDebug"   ;;
+        staticrelease|srel|StaticRelease|sr) configuration="StaticRelease" ;;
+        "")                                  configuration="Debug"         ;;
+        *)                                   configuration="$2"            ;;
+    esac
+    case "$3" in
+        win32|Win32|w32)       platform="Win32"            ;;
+        any|Any)               platform="Any CPU"          ;;
+        mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
+        x64)                   platform="x64"              ;;
+        "")                    platform="Win32"            ;;
+        *)                     platform="$3"               ;;
+    esac
+
+    proj=$(cygpath -aw "$proj")
+
+    if [[ $__vs_test_mode == true ]]; then
+        echo $proj $configuration $platform
+    else
+        vsvars32
+        time devenv "$proj" /Rebuild "$configuration|$platform"
+    fi
+}
+
+__vs_clean () {
+    local proj
+    proj="$1"
+    for s in ${!shortcuts[@]}; do
+        [[ "$1" == "$s" ]] && proj=${shortcuts["$s"]}
+    done
+
+    proj=$(cygpath -aw "$proj")
+    vsvars32
+    time devenv "$proj" /Clean
+}
+
+__vs_help () {
+    echo "Usage:  vs OPERATION [project|solution]_filename [debug|release] [-n|...]"
+}
+
+__vs_test () {
+    __vs_test_mode=true
+    [[ "$(__vs_build a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_build a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(__vs_rebuild a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
+    __vs_test_mode=false
+}
+
+vs () {
+    case "$1" in
+        "build")     __vs_build "$2" "$3" "$4"   ;;
+
+        "rebuild")   __vs_rebuild "$2" "$3" "$4" ;;
+
+        "clean")     __vs_clean "$2"             ;;
+
+        "help")      __vs_help                   ;;
+
+        "__test")    __vs_test                   ;;
+
+        *)           __vs_help                   ;;
+    esac
+}
