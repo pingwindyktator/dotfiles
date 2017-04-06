@@ -134,10 +134,10 @@ vs () {
 
         clean|c)     __vs_clean "$2"             ;;
 
-        help)      __vs_help                   ;;
+        help)        __vs_help                   ;;
 
-        __test)    __vs_test                   ;;
+        __test)      __vs_test                   ;;
 
-        *)         __vs_help                   ;;
+        *)           __vs_help                   ;;
     esac
 }
