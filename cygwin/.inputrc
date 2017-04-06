@@ -77,4 +77,5 @@
 #$endif
 
 # case-insensitiv bash autocompletion
+# it's cool since windows' NTFS is case insensitive
 set completion-ignore-case On
