@@ -25,7 +25,7 @@ __vs_build () {
     esac
     case "$3" in
         win32|Win32|w32)       platform="Win32"            ;;
-        any|Any)               platform="Any CPU"          ;;
+        any|Any|anycpu|AnyCPU) platform="Any CPU"          ;;
         mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
         x64)                   platform="x64"              ;;
         "")                    platform="Win32"            ;;
