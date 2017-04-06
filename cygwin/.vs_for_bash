@@ -59,7 +59,7 @@ __vs_rebuild () {
     esac
     case "$3" in
         win32|Win32|w32)       platform="Win32"            ;;
-        any|Any)               platform="Any CPU"          ;;
+        any|Any|anycpu|AnyCPU) platform="Any CPU"          ;;
         mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
         x64)                   platform="x64"              ;;
         "")                    platform="Win32"            ;;
@@ -89,7 +89,20 @@ __vs_clean () {
 }
 
 __vs_help () {
-    echo "Usage:  vs OPERATION [project|solution]_filename [debug|release] [-n|...]"
+    echo "Usage:  vs build [project|solution]_filename [configuration] [platform]"
+    echo "        vs rebuild [project|solution]_filename [configuration] [platform]"
+    echo "        vs clean [project|solution]_filename"
+    echo "        vs help"
+    echo ""
+    echo "Configurations: debug, deb, Debug, d"
+    echo "                release, rel, Release, r"
+    echo "                staticdebug, sdeb, StaticDebug, sd"
+    echo "                staticrelease, srel, StaticRelease, sr"
+    echo ""
+    echo "Platforms: win32, Win32, w32"
+    echo "           any, Any, anycpu, AnyCPU"
+    echo "           mixed, mix, Mix, Mixed"
+    echo "           x64"
 }
 
 __vs_test () {
@@ -115,16 +128,16 @@ __vs_test () {
 
 vs () {
     case "$1" in
-        "build")     __vs_build "$2" "$3" "$4"   ;;
+        build)     __vs_build "$2" "$3" "$4"   ;;
 
-        "rebuild")   __vs_rebuild "$2" "$3" "$4" ;;
+        rebuild)   __vs_rebuild "$2" "$3" "$4" ;;
 
-        "clean")     __vs_clean "$2"             ;;
+        clean)     __vs_clean "$2"             ;;
 
-        "help")      __vs_help                   ;;
+        help)      __vs_help                   ;;
 
-        "__test")    __vs_test                   ;;
+        __test)    __vs_test                   ;;
 
-        *)           __vs_help                   ;;
+        *)         __vs_help                   ;;
     esac
 }
