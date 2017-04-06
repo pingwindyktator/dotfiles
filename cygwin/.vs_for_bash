@@ -89,8 +89,8 @@ __vs_clean () {
 }
 
 __vs_help () {
-    echo "Usage:  vs build [project|solution]_filename [configuration] [platform]"
-    echo "        vs rebuild [project|solution]_filename [configuration] [platform]"
+    echo "Usage:  vs [build|b] [project|solution]_filename [configuration] [platform]"
+    echo "        vs [rebuild|r] [project|solution]_filename [configuration] [platform]"
     echo "        vs clean [project|solution]_filename"
     echo "        vs help"
     echo ""
