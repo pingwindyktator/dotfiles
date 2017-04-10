@@ -21,6 +21,7 @@ __vs_build () {
         staticdebug|sdeb|StaticDebug|sd)     configuration="StaticDebug"   ;;
         staticrelease|srel|StaticRelease|sr) configuration="StaticRelease" ;;
         "")                                  configuration="Debug"         ;;
+        -*)                                  configuration="Debug"         ;;
         *)                                   configuration="$2"            ;;
     esac
     case "$3" in
@@ -29,6 +30,7 @@ __vs_build () {
         mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
         x64)                   platform="x64"              ;;
         "")                    platform="Win32"            ;;
+        -*)                    platform="Win32"            ;;
         *)                     platform="$3"               ;;
     esac
 
@@ -55,6 +57,7 @@ __vs_rebuild () {
         staticdebug|sdeb|StaticDebug|sd)     configuration="StaticDebug"   ;;
         staticrelease|srel|StaticRelease|sr) configuration="StaticRelease" ;;
         "")                                  configuration="Debug"         ;;
+        -*)                                  configuration="Debug"         ;;
         *)                                   configuration="$2"            ;;
     esac
     case "$3" in
@@ -63,6 +66,7 @@ __vs_rebuild () {
         mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
         x64)                   platform="x64"              ;;
         "")                    platform="Win32"            ;;
+        -*)                    platform="Win32"            ;;
         *)                     platform="$3"               ;;
     esac
 
@@ -107,12 +111,15 @@ __vs_help () {
 
 __vs_test () {
     __vs_test_mode=true
+    [[ "$(vs build a/b/c.sln sr x64 -b)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs build a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs build a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs build a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs build a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs b a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs b a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs b a/b/c.sln -b -n)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs b a/b/c.sln d -b)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs b a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs b a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs r a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
@@ -122,22 +129,25 @@ __vs_test () {
     [[ "$(vs rebuild a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs rebuild a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs rebuild a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln -b -n)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln d -b)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
     [[ "$(vs rebuild a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
+    [[ "$(vs rebuild a/b/c.sln sr x64 -b)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
     __vs_test_mode=false
 }
 
 vs () {
     case "$1" in
-        build|b)     __vs_build "$2" "$3" "$4"   ;;
+        build|b)     __vs_build "$2" "$3" "$4" "$5" "$6" "$7" "$8"   ;;
 
-        rebuild|r)   __vs_rebuild "$2" "$3" "$4" ;;
+        rebuild|r)   __vs_rebuild "$2" "$3" "$4" "$5" "$6" "$7" "$8" ;;
 
-        clean|c)     __vs_clean "$2"             ;;
+        clean|c)     __vs_clean "$2" "$3" "$4" "$5" "$6" "$7" "$8"   ;;
 
-        help)        __vs_help                   ;;
+        help)        __vs_help                                       ;;
 
-        __test)      __vs_test                   ;;
+        __test)      __vs_test                                       ;;
 
-        *)           __vs_help                   ;;
+        *)           __vs_help                                       ;;
     esac
 }
