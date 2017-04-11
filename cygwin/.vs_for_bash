@@ -6,7 +6,7 @@ alias beep='rundll32 user32.dll,MessageBeep'
 declare -A shortcuts=(
                      )
 
-__vs_test_mode=false
+__vs_test_mode=true
 
 __vs_get_config () {
     local configuration platform
@@ -70,8 +70,8 @@ __vs_modify_build_cmd () {
         esac
     done
 
-    [[ ${nuget_restore} == true ]] && cmd="$(__vs_get_nuget_restore_command "${proj}") ; ${cmd}"
-    [[ ${beep} == true ]] && cmd="${cmd} ; beep"
+    [[ "${nuget_restore}" == true ]] && cmd="$(__vs_get_nuget_restore_command "${proj}") ; ${cmd}"
+    [[ "${beep}" == true ]] && cmd="${cmd} ; beep"
 
     printf %s "${cmd}"
 }
