@@ -36,12 +36,12 @@ extract () {
 }
 
 winps () {
-    export PS1="\[\e[34m\][\[\e[m\]\[\e[34m\]\A\[\e[m\]\[\e[34m\]] \[\e[m\]\[\e[32m\]\u\[\e[m\]:\[\e[33m\]\`cwd\`\[\e[m\]\[\e[32m\]\`\`\[\e[m\]\\$ "
+    export PS1="${RESET}${BLUE}[${CLOCK}] ${GREEN}${USERNAME}${WHITE}:${YELLOW}\`cwd\`${WHITE}${CMD_PROMPT} "
     
 }
 
 cygps () {
-    export PS1="\[\e[34m\][\[\e[m\]\[\e[34m\]\A\[\e[m\]\[\e[34m\]] \[\e[m\]\[\e[32m\]\u\[\e[m\]:\[\e[33m\]\w\[\e[m\]\[\e[32m\]\`\`\[\e[m\]\\$ "
+    export PS1="${RESET}${BLUE}[${CLOCK}] ${GREEN}${USERNAME}${WHITE}:${YELLOW}\`pwd\`${WHITE}${CMD_PROMPT} "
 }
 
 # get current status of git repo
