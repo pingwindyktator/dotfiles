@@ -6,88 +6,74 @@ alias beep='rundll32 user32.dll,MessageBeep'
 declare -A shortcuts=(
                      )
 
-__vs_test_mode=false
+__vs_test_mode=true
 
-__vs_build () {
-    local proj configuration platform
-    proj="$1"
-    for s in ${!shortcuts[@]}; do
-        [[ "$1" == "$s" ]] && proj=${shortcuts["$s"]}
-    done
+__vs_get_config () {
+    local configuration platform
 
-    case "$2" in
+    case "$1" in
         debug|deb|Debug|d)                   configuration="Debug"         ;;
         release|rel|Release|r)               configuration="Release"       ;;
         staticdebug|sdeb|StaticDebug|sd)     configuration="StaticDebug"   ;;
         staticrelease|srel|StaticRelease|sr) configuration="StaticRelease" ;;
         "")                                  configuration="Debug"         ;;
         -*)                                  configuration="Debug"         ;;
-        *)                                   configuration="$2"            ;;
+        *)                                   configuration="$1"            ;;
     esac
-    case "$3" in
+    case "$2" in
         win32|Win32|w32)       platform="Win32"            ;;
         any|Any|anycpu|AnyCPU) platform="Any CPU"          ;;
         mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
         x64)                   platform="x64"              ;;
         "")                    platform="Win32"            ;;
         -*)                    platform="Win32"            ;;
-        *)                     platform="$3"               ;;
+        *)                     platform="$2"               ;;
     esac
 
-    proj=$(cygpath -aw "$proj")
+    echo "$configuration|$platform"
+}
 
-    if [[ $__vs_test_mode == true ]]; then
-        echo $proj $configuration $platform
+__vs_get_proj () {
+    local result
+    result="$1"
+    for s in ${!shortcuts[@]}; do
+        [[ "$1" == "$s" ]] && result=${shortcuts["$s"]}
+    done
+    echo $(cygpath -aw "$result")
+}
+
+__vs_build () {
+    local proj configuration cmd
+    proj=$(__vs_get_proj "$1")
+    configuration="$(__vs_get_config "$2" "$3")"
+
+    if [[ "$proj" == *.vcxproj || "$proj" == *.vcproj ]]; then
+        cmd="vsvars32 ; time devenv '$proj' /Build '$configuration' /Project '$proj'"
     else
-        vsvars32
-        time devenv "$proj" /Build "$configuration|$platform"
+        cmd="vsvars32 ; time devenv '$proj' /Build '$configuration'"
     fi
+
+    [[ $__vs_test_mode == true ]] && echo $cmd || eval '$cmd'
 }
 
 __vs_rebuild () {
-    local proj configuration platform
-    proj="$1"
-    for s in ${!shortcuts[@]}; do
-        [[ "$1" == "$s" ]] && proj=${shortcuts["$s"]}
-    done
+    local proj configuration 
+    configuration="$(__vs_get_config "$2" "$3")"
+    proj=$(__vs_get_proj "$1")
 
-    case "$2" in
-        debug|deb|Debug|d)                   configuration="Debug"         ;;
-        release|rel|Release|r)               configuration="Release"       ;;
-        staticdebug|sdeb|StaticDebug|sd)     configuration="StaticDebug"   ;;
-        staticrelease|srel|StaticRelease|sr) configuration="StaticRelease" ;;
-        "")                                  configuration="Debug"         ;;
-        -*)                                  configuration="Debug"         ;;
-        *)                                   configuration="$2"            ;;
-    esac
-    case "$3" in
-        win32|Win32|w32)       platform="Win32"            ;;
-        any|Any|anycpu|AnyCPU) platform="Any CPU"          ;;
-        mixed|mix|Mix|Mixed)   platform="Mixed Platforms"  ;;
-        x64)                   platform="x64"              ;;
-        "")                    platform="Win32"            ;;
-        -*)                    platform="Win32"            ;;
-        *)                     platform="$3"               ;;
-    esac
-
-    proj=$(cygpath -aw "$proj")
-
-    if [[ $__vs_test_mode == true ]]; then
-        echo $proj $configuration $platform
+    if [[ "$proj" == *.vcxproj || "$proj" == *.vcproj ]]; then
+        cmd="vsvars32 ; time devenv '$proj' /Rebuild '$configuration' /Project '$proj'"
     else
-        vsvars32
-        time devenv "$proj" /Rebuild "$configuration|$platform"
+        cmd="vsvars32 ; time devenv '$proj' /Rebuild '$configuration'"
     fi
+
+    [[ $__vs_test_mode == true ]] && echo $cmd || eval '$cmd'
 }
 
 __vs_clean () {
     local proj
-    proj="$1"
-    for s in ${!shortcuts[@]}; do
-        [[ "$1" == "$s" ]] && proj=${shortcuts["$s"]}
-    done
+    proj=$(__vs_get_proj "$1")
 
-    proj=$(cygpath -aw "$proj")
     vsvars32
     time devenv "$proj" /Clean
 }
@@ -110,30 +96,35 @@ __vs_help () {
 }
 
 __vs_test () {
+    local counter test_starts __vs_test_mode_backup
+    __vs_test_mode_backup=$__vs_test_mode
     __vs_test_mode=true
-    [[ "$(vs build a/b/c.sln sr x64 -b)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs build a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs build a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs build a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs build a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs b a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs b a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs b a/b/c.sln -b -n)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs b a/b/c.sln d -b)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs b a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs b a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs r a/b/c.sln BBB CCC)" == "$(cygpath -aw a/b/c.sln) BBB CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs r a/b/c.sln d CCC)" == "$(cygpath -aw a/b/c.sln) Debug CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs r a/b/c.sln rel CCC)" == "$(cygpath -aw a/b/c.sln) Release CCC" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs r a/b/c.sln srel)" == "$(cygpath -aw a/b/c.sln) StaticRelease Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln sd mix)" == "$(cygpath -aw a/b/c.sln) StaticDebug Mixed Platforms" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln d)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln -b -n)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln d -b)" == "$(cygpath -aw a/b/c.sln) Debug Win32" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln sr x64)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
-    [[ "$(vs rebuild a/b/c.sln sr x64 -b)" == "$(cygpath -aw a/b/c.sln) StaticRelease x64" ]] && echo "OK" || echo "ERROR"
-    __vs_test_mode=false
+    counter=0
+    test_starts='((counter++)) ; echo -n "$counter: "'
+
+    eval $test_starts ; [[ "$(vs build a/b/c.sln sr x64 -b)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'StaticRelease|x64'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs build a/b/c.sln BBB CCC)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'BBB|CCC'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs build a/b/c.vcxproj d CCC)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.vcxproj)' /Build 'Debug|CCC' /Project '$(cygpath -aw a/b/c.vcxproj)'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs build a/b/c.sln rel CCC)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'Release|CCC'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs build a/b/c.sln srel)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'StaticRelease|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs b a/b/c.sln sd mix)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'StaticDebug|Mixed Platforms'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs b a/b/c.sln)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs b a/b/c.sln -b -n)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs b a/b/c.sln d -b)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs b a/b/c.sln d)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs b a/b/c.sln sr x64)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'StaticRelease|x64'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs r a/b/c.sln BBB CCC)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'BBB|CCC'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs r a/b/c.sln d CCC)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'Debug|CCC'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs r a/b/c.sln rel CCC)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'Release|CCC'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs r a/b/c.sln srel)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'StaticRelease|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.sln sd mix)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'StaticDebug|Mixed Platforms'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.sln)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.sln d)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.vcproj -b -n)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.vcproj)' /Rebuild 'Debug|Win32' /Project '$(cygpath -aw a/b/c.vcproj)'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.sln d -b)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'Debug|Win32'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.sln sr x64)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'StaticRelease|x64'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild a/b/c.sln sr x64 -b)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'StaticRelease|x64'" ]] && echo "OK" || echo "ERROR"
+    __vs_test_mode=$__vs_test_mode_backup
 }
 
 vs () {
