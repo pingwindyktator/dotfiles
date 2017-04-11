@@ -77,7 +77,6 @@ shopt -s nocaseglob
 
 # Main source code dir
 src=""
-tf="$ToolsFolder/"
 
 # PS1 switches
 RESET="\[\017\]"
