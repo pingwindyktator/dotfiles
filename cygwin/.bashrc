@@ -77,7 +77,21 @@ shopt -s nocaseglob
 
 # Main source code dir
 src=""
+tf="$ToolsFolder/"
 
+# PS1 switches
+RESET="\[\017\]"
+NORMAL="\[\033[0m\]"
+RED="\[\033[31;1m\]"
+YELLOW="\[\e[33;2m\]"
+BLUE="\e[34m\]"
+WHITE="\[\033[37;1m\]"
+GREEN="\[\e[m\]\[\e[32m\]"
+CLOCK="\A"
+USERNAME="\u"
+CMD_PROMPT="\\$"
+
+# Some people use a different file for aliases
 if [ -f "${HOME}/.bash_aliases" ]; then
   source "${HOME}/.bash_aliases"
 fi
@@ -98,4 +112,4 @@ fi
 # umask 077
 
 
-export PS1="\[\e[34m\][\[\e[m\]\[\e[34m\]\A\[\e[m\]\[\e[34m\]] \[\e[m\]\[\e[32m\]\u\[\e[m\]:\[\e[33m\]\w\[\e[m\]\[\e[32m\]\`\`\[\e[m\]\\$ "
+export PS1="${RESET}${BLUE}[${CLOCK}] ${GREEN}${USERNAME}${WHITE}:${YELLOW}\`cwd\`${WHITE}${CMD_PROMPT} "
