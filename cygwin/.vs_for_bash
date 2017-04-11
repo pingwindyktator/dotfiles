@@ -6,7 +6,7 @@ alias beep='rundll32 user32.dll,MessageBeep'
 declare -A shortcuts=(
                      )
 
-__vs_test_mode=true
+__vs_test_mode=false
 
 __vs_get_config () {
     local configuration platform
