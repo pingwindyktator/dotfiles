@@ -6,6 +6,8 @@ set swapfile
 set nobackup
 set noundofile
 set dir=%temp%
+set ignorecase
+set smartcase
 
 set diffexpr=MyDiff()
 function MyDiff()
