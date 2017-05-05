@@ -48,7 +48,7 @@ __vs_get_nuget_restore_command () {
     proj=$(cygpath -aw "${proj}")
 
     if [[ "${proj}" == *.sln ]]; then
-        printf %s "nuget restore '${proj}'"
+        printf %s "nuget restore '${proj}' ;"
     else
         printf %s ""
     fi
@@ -70,7 +70,7 @@ __vs_modify_build_cmd () {
         esac
     done
 
-    [[ "${nuget_restore}" == true ]] && cmd="$(__vs_get_nuget_restore_command "${proj}") ; ${cmd}"
+    [[ "${nuget_restore}" == true ]] && cmd="$(__vs_get_nuget_restore_command "${proj}") ${cmd}"
     [[ "${beep}" == true ]] && cmd="${cmd} ; beep"
 
     printf %s "${cmd}"
@@ -162,10 +162,10 @@ __vs_test () {
     eval $test_starts ; [[ "$(vs build a/b/c.sln srel -n -b)" == "nuget restore '$(cygpath -aw a/b/c.sln)' ; vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'StaticRelease|Win32' ; beep" ]] && echo "OK" || echo "ERROR"
     eval $test_starts ; [[ "$(vs b a/b/c.sln sd mix --beep -n -n)" == "nuget restore '$(cygpath -aw a/b/c.sln)' ; vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'StaticDebug|Mixed Platforms' ; beep" ]] && echo "OK" || echo "ERROR"
     eval $test_starts ; [[ "$(vs b a/b/c.sln --nuget --beep)" == "nuget restore '$(cygpath -aw a/b/c.sln)' ; vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Build 'Debug|Win32' ; beep" ]] && echo "OK" || echo "ERROR"
-    eval $test_starts ; [[ "$(vs r a/b/c.vcxproj rel CCC -nn -n -n -nnn)" == " ; vsvars32 ; time devenv '$(cygpath -aw a/b/c.vcxproj)' /Rebuild 'Release|CCC' /Project '$(cygpath -aw "a/b/c.vcxproj")'" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs r a/b/c.vcxproj rel CCC -nn -n -n -nnn)" == " vsvars32 ; time devenv '$(cygpath -aw a/b/c.vcxproj)' /Rebuild 'Release|CCC' /Project '$(cygpath -aw "a/b/c.vcxproj")'" ]] && echo "OK" || echo "ERROR"
     eval $test_starts ; [[ "$(vs r a/b/c.sln srel -nb -bn)" == "nuget restore '$(cygpath -aw a/b/c.sln)' ; vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'StaticRelease|Win32' ; beep" ]] && echo "OK" || echo "ERROR"
     eval $test_starts ; [[ "$(vs rebuild a/b/c.sln sd mix -bbbb)" == "vsvars32 ; time devenv '$(cygpath -aw a/b/c.sln)' /Rebuild 'StaticDebug|Mixed Platforms' ; beep" ]] && echo "OK" || echo "ERROR"
-    eval $test_starts ; [[ "$(vs rebuild "a a/b b/c.vcxproj" sd mix -bbbb --nuget)" == " ; vsvars32 ; time devenv '$(cygpath -aw "a a/b b/c.vcxproj")' /Rebuild 'StaticDebug|Mixed Platforms' /Project '$(cygpath -aw "a a/b b/c.vcxproj")' ; beep" ]] && echo "OK" || echo "ERROR"
+    eval $test_starts ; [[ "$(vs rebuild "a a/b b/c.vcxproj" sd mix -bbbb --nuget)" == " vsvars32 ; time devenv '$(cygpath -aw "a a/b b/c.vcxproj")' /Rebuild 'StaticDebug|Mixed Platforms' /Project '$(cygpath -aw "a a/b b/c.vcxproj")' ; beep" ]] && echo "OK" || echo "ERROR"
     eval $test_starts ; [[ "$(vs b "a a/b b/c.sln" sd -bbbb --nuget)" == "nuget restore '$(cygpath -aw "a a/b b/c.sln")' ; vsvars32 ; time devenv '$(cygpath -aw "a a/b b/c.sln")' /Build 'StaticDebug|Win32' ; beep" ]] && echo "OK" || echo "ERROR"
 
     __vs_test_mode="${__vs_test_mode_backup}"
