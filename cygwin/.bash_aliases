@@ -43,4 +43,3 @@ alias cwd='cygpath -aw "$(pwd)"'
 alias vscode='code'
 alias wpath='cygpath -wp "$PATH" | sed "s/;/\n/g"'
 alias cpath='echo -e ${PATH//:/\\n}'
-alias rm_tr_sp="sed 's/^[ \t]*//;s/[ \t]*$//'"
