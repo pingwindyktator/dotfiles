@@ -1,12 +1,12 @@
 [core]
-	autocrlf = true
-	preloadindex = true
-	fscache = true
-	fileMode = false
+    autocrlf = true
+    preloadindex = true
+    fscache = true
+    fileMode = false
 [gc]
-	auto = 256
+    auto = 256
 [color]
-	ui = always
+    ui = always
 [user]
     name = <you'r name here>
     email = <you'r email here>
