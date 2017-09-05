@@ -172,7 +172,6 @@ __setpy_common () {
 }
 
 setpy2 () {
-    local path_entries=$(echo $PATH | sed 's/:/\n/g')
     __setpy_common
     local result="${PATH}:"
 
@@ -185,7 +184,6 @@ setpy2 () {
 }
 
 setpy3 () {
-    local path_entries=$(echo $PATH | sed 's/:/\n/g')
     __setpy_common
     local result="${PATH}:"
 
