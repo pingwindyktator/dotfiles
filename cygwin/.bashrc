@@ -78,6 +78,8 @@ shopt -s nocaseglob
 # Main source code dir
 src=""
 
+PYTHONIOENCODING=UTF-8
+
 # PS1 switches
 RESET="\033[0m"
 NORMAL="\033[0m"
