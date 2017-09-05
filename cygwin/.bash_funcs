@@ -156,3 +156,43 @@ weather () {
   done
   curl wttr.in/"${location}"
 }
+
+__setpy_common () {
+    local path_entries=$(echo $PATH | sed 's/:/\n/g')
+    local result
+
+    while read -r entry; do
+        if [[ "${entry}" == /cygdrive/c/Python* ]]; then
+            echo "removing ${entry}"
+        else
+            result="${result}${entry}:"
+        fi
+    done <<< "${path_entries}"
+    PATH="${result}"
+}
+
+setpy2 () {
+    local path_entries=$(echo $PATH | sed 's/:/\n/g')
+    __setpy_common
+    local result="${PATH}:"
+
+    for python_path in "/cygdrive/c/Python27" "/cygdrive/c/Python27/Scripts"; do
+        result="${result}${python_path}:"
+        echo "adding ${python_path}"
+    done
+
+    PATH="${result}"
+}
+
+setpy3 () {
+    local path_entries=$(echo $PATH | sed 's/:/\n/g')
+    __setpy_common
+    local result="${PATH}:"
+
+    for python_path in "/cygdrive/c/Python34" "/cygdrive/c/Python34/Scripts"; do
+        result="${result}${python_path}:"
+        echo "adding ${python_path}"
+    done
+
+    PATH="${result}"
+}
