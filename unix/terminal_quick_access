@@ -1,0 +1,35 @@
+#!/bin/bash
+
+windows_ids=$(wmctrl -l | awk '{print $1}')
+term_windows_ids=""
+
+for window_id in $windows_ids; do
+    pid=$(xdotool getwindowpid $window_id)
+    command=$(ps -p $pid -o args | tail -1 )
+    if [[ $command == *"term"* ]]; then
+        term_windows_ids="$term_windows_ids $window_id"
+    fi
+done
+
+if [[ $term_windows_ids == "" ]]; then
+    /etc/alternatives/x-terminal-emulator
+    exit 0
+fi
+
+active_window=$(xdotool getwindowfocus)
+active_window=$(echo "obase=16; $active_window" | bc)
+active_window=$(printf %08b $active_window | sed 's/ /0/g')
+active_window=$(echo 0x$active_window | tr '[:upper:]' '[:lower:]')
+command_to_run=""
+
+if [[ $term_windows_ids == *"$active_window"* ]]; then
+    command_to_run="xdotool windowminimize "
+    echo "minimalize"
+else
+    command_to_run="xdotool windowactivate "
+    echo "maximize"
+fi
+
+for term_window_id in $term_windows_ids; do
+    eval $command_to_run $term_window_id
+done
