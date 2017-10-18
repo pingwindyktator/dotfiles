@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# bind this script to keyboard shortcut and it will:
+# 1. bring terminal windows to the top ...
+# 2. ... or minimalize them if already on the top ...
+# 3. ... or start new default terminal if not started already
+# works with X Window System only
+# requires xdotool, wmctrl packages
+
 windows_ids=$(wmctrl -l | awk '{print $1}')
 term_windows_ids=""
 
