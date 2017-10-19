@@ -9,6 +9,9 @@
 
 windows_ids=$(wmctrl -l | awk '{print $1}')
 term_windows_ids=""
+if [ -f /tmp/.bring_terminals_top ]; then
+    . /tmp/.bring_terminals_top
+fi
 
 for window_id in $windows_ids; do
     pid=$(xdotool getwindowpid $window_id)
@@ -28,15 +31,25 @@ active_window=$(echo "obase=16; $active_window" | bc)
 active_window=$(printf %08b $active_window | sed 's/ /0/g')
 active_window=$(echo 0x$active_window | tr '[:upper:]' '[:lower:]')
 command_to_run=""
+post_command_to_run=""
 
 if [[ $term_windows_ids == *"$active_window"* ]]; then
+    # minimalize
     command_to_run="xdotool windowminimize "
-    echo "minimalize"
+    _prev_active_window=$active_window
 else
+    # maximize
     command_to_run="xdotool windowactivate "
-    echo "maximize"
+    _prev_active_window=
+    if [[ $term_windows_ids == *"$prev_active_window"* && $prev_active_window != "" ]]; then
+        post_command_to_run="xdotool windowactivate $prev_active_window"
+    fi
 fi
+
+echo prev_active_window=$_prev_active_window > /tmp/.bring_terminals_top
 
 for term_window_id in $term_windows_ids; do
     eval $command_to_run $term_window_id
 done
+
+eval $post_command_to_run
