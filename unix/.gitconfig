@@ -1,0 +1,24 @@
+[core]
+    autocrlf = true
+    preloadindex = true
+    fscache = true
+    fileMode = false
+[gc]
+    auto = 256
+[color]
+    ui = always
+[user]
+    name = <you'r name here>
+    email = <you'r email here>
+[credential]
+    helper = cache --timeout=3600
+[alias]
+    stats = shortlog -sn --since='2 weeks' --until='now'
+    diff = diff -w
+    today = log --since=00:00:00 --all --no-merges --oneline --author=<you'r email here>
+    graph = log --graph --all --decorate --stat --date=iso
+    stage = add
+    unstage = reset
+    slog = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+    filelof = log -u
+    ls = ls-files
