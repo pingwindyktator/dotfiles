@@ -36,17 +36,15 @@ post_command_to_run=""
 if [[ $term_windows_ids == *"$active_window"* ]]; then
     # minimalize
     command_to_run="xdotool windowminimize "
-    _prev_active_window=$active_window
+    echo prev_active_window=$active_window > /tmp/.bring_terminals_top
 else
     # maximize
     command_to_run="xdotool windowactivate "
-    _prev_active_window=
+    echo prev_active_window= > /tmp/.bring_terminals_top
     if [[ $term_windows_ids == *"$prev_active_window"* && $prev_active_window != "" ]]; then
         post_command_to_run="xdotool windowactivate $prev_active_window"
     fi
 fi
-
-echo prev_active_window=$_prev_active_window > /tmp/.bring_terminals_top
 
 for term_window_id in $term_windows_ids; do
     eval $command_to_run $term_window_id
