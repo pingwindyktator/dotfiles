@@ -1,0 +1,181 @@
+# https://github.com/xvoland/Extract
+extract () {
+  if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+    echo "       extract <path/file_name_1.ext> [path/file_name_2.ext] [path/file_name_3.ext]"
+    return 1
+  else
+    for n in $@
+    do
+      if [ -f "$n" ] ; then
+          case "${n%,}" in
+            *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar) 
+                         tar xvf "$n"       ;;
+            *.lzma)      unlzma ./"$n"      ;;
+            *.bz2)       bunzip2 ./"$n"     ;;
+            *.rar)       unrar x -ad ./"$n" ;;
+            *.gz)        gunzip ./"$n"      ;;
+            *.zip)       unzip ./"$n"       ;;
+            *.z)         uncompress ./"$n"  ;;
+            *.7z|*.arj|*.cab|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.rpm|*.udf|*.wim|*.xar)
+                         7z x ./"$n"        ;;
+            *.xz)        unxz ./"$n"        ;;
+            *.exe)       cabextract ./"$n"  ;;
+            *)
+                         echo "extract: '$n' - unknown archive method"
+                         return 1
+                         ;;
+          esac
+      else
+          echo "'$n' - file does not exist"
+          return 1
+      fi
+    done
+  fi
+}
+
+# get current status of git repo
+parse_git_dirty () {
+	status=`git status 2>&1 | tee`
+	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
+	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
+	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
+	newfile=`echo -n "${status}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
+	renamed=`echo -n "${status}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
+	deleted=`echo -n "${status}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
+	bits=''
+	if [ "${renamed}" == "0" ]; then
+		bits=">${bits}"
+	fi
+	if [ "${ahead}" == "0" ]; then
+		bits="*${bits}"
+	fi
+	if [ "${newfile}" == "0" ]; then
+		bits="+${bits}"
+	fi
+	if [ "${untracked}" == "0" ]; then
+		bits="?${bits}"
+	fi
+	if [ "${deleted}" == "0" ]; then
+		bits="x${bits}"
+	fi
+	if [ "${dirty}" == "0" ]; then
+		bits="!${bits}"
+	fi
+	if [ ! "${bits}" == "" ]; then
+		echo " ${bits}"
+	else
+		echo ""
+	fi
+
+}
+
+# get current branch in git repo
+parse_git_branch () {
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${BRANCH}" == "" ]
+	then
+		STAT=`parse_git_dirty`
+		echo " [${BRANCH}${STAT}] "
+	else
+		echo ""
+	fi
+}
+
+# This function defines a 'cd' replacement function capable of keeping,
+# displaying and accessing history of visited directories, up to 10 entries.
+# To use it, uncomment it, source this file and try 'cd --'.
+# acd_func 1.0.5, 10-nov-2004
+# Petar Marinov, http:/geocities.com/h2428, this is public domain
+cd_func () {
+  local x2 the_new_dir adir index
+  local -i cnt
+
+  if [[ $1 ==  "--" ]]; then
+    dirs -v
+    return 0
+  fi
+
+  the_new_dir=$1
+  [[ -z $1 ]] && the_new_dir=$HOME
+
+  if [[ ${the_new_dir:0:1} == '-' ]]; then
+    #
+    # Extract dir N from dirs
+    index=${the_new_dir:1}
+    [[ -z $index ]] && index=1
+    adir=$(dirs +$index)
+    [[ -z $adir ]] && return 1
+    the_new_dir=$adir
+  fi
+
+  # '~' has to be substituted by ${HOME}
+  [[ ${the_new_dir:0:1} == '~' ]] && the_new_dir="${HOME}${the_new_dir:1}"
+
+  # Now change to the new dir and add to the top of the stack
+  pushd "${the_new_dir}" > /dev/null
+  [[ $? -ne 0 ]] && return 1
+  the_new_dir=$(pwd)
+
+  # Trim down everything beyond 11th entry
+  popd -n +11 2>/dev/null 1>/dev/null
+
+  # Remove any other occurence of this dir, skipping the top of the stack
+  for ((cnt=1; cnt <= 10; cnt++)); do
+    x2=$(dirs +${cnt} 2>/dev/null)
+    [[ $? -ne 0 ]] && return 0
+    [[ ${x2:0:1} == '~' ]] && x2="${HOME}${x2:1}"
+    if [[ "${x2}" == "${the_new_dir}" ]]; then
+      popd -n +$cnt 2>/dev/null 1>/dev/null
+      cnt=cnt-1
+    fi
+  done
+
+  return 0
+}
+
+nonzero_return () {
+	RETVAL=$?
+	[ $RETVAL -ne 0 ] && echo "($RETVAL)"
+}
+
+weather () {
+  local location
+  for i in "{$@}"; do
+    location="${location}_${i}"
+  done
+  curl wttr.in/"${location}"
+}
+
+__setgcc_list () {
+    printf "%s\n" $(find /usr/bin/ -iname 'g++*' | sed 's|/usr/bin/g++-*||' | sed '/^$/d')
+}
+
+__setgcc_help () {
+    printf "%s\n" "Usage: setgcc [version] : sets current gcc/g++ version to [version]"
+    printf "%s\n" "       setgcc --list|-l : list all available gcc/g++ versions"
+    printf "%s\n" "       setgcc --help|-h : show this help message"
+}
+
+__setgcc_set () {
+    if [ -z "${1}" ]; then
+        __setgcc_help
+        return 1
+    fi
+
+    if [ ! -f "/usr/bin/gcc-$1" ] || [ ! -f "/usr/bin/g++-$1" ]; then
+        printf "%s\n" "no such gcc/g++ version installed"
+        return 1
+    fi
+
+    sudo update-alternatives --set gcc "/usr/bin/gcc-${1}" && sudo update-alternatives --set g++ "/usr/bin/g++-${1}" && echo "ok!"
+}
+
+setgcc () {
+    case "${1}" in
+        --list|-l) shift ; __setgcc_list "${@}" ;;
+        --help|-h) shift ; __setgcc_help "${@}" ;;
+        *)                 __setgcc_set  "${@}"
+    esac
+}
