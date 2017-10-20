@@ -73,11 +73,11 @@ parse_git_dirty () {
 
 # get current branch in git repo
 parse_git_branch () {
-	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	BRANCH=$(git branch 2> /dev/null | sed -e 's/* //' | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
 	if [ ! "${BRANCH}" == "" ]
 	then
-		STAT=`parse_git_dirty`
-		echo " [${BRANCH}${STAT}] "
+		STAT=$(parse_git_dirty)
+		echo " (${BRANCH}${STAT}) "
 	else
 		echo ""
 	fi
