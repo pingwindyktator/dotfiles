@@ -38,3 +38,8 @@ alias du='du -h'
 # Custom ones
 alias bf='bg ; fg'
 alias car='cat'
+alias mkdir='mkdir -pv'
+alias diff='colordiff'
+alias rm='rm -I --preserve-root'
+alias noh='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
+alias find="find 2> >(grep -v 'Permission denied' >&2)"
