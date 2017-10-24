@@ -148,6 +148,10 @@ weather () {
   curl wttr.in/"${location}"
 }
 
+gedit () {
+    /usr/bin/gedit "${@}" > /dev/null & disown
+}
+
 __setgcc_list () {
     printf "%s\n" $(find /usr/bin/ -iname 'g++*' | sed 's|/usr/bin/g++-*||' | sed '/^$/d')
 }
