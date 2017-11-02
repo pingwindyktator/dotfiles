@@ -7,4 +7,5 @@ set tabstop=4
 set expandtab
 set nocp
 set nu
+set hlsearch
 cmap w!! w !sudo tee > /dev/null %
