@@ -19,7 +19,6 @@ alias li='l *'
 # Misc :)
 alias less='less -r'                          # raw control characters
 alias whence='type -a'                        # where, of a sort
-alias grep='grep --color'                     # show differences in colour
 alias egrep='egrep --color=auto'              # show differences in colour
 alias fgrep='fgrep --color=auto'              # show differences in colour
 alias ipext='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
@@ -43,3 +42,4 @@ alias diff='colordiff'
 alias rm='rm -I --preserve-root'
 alias noh='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 alias find="find 2> >(grep -v 'Permission denied' >&2)"
+alias grep='grep -s --color'
