@@ -1,5 +1,5 @@
 [core]
-    autocrlf = true
+    autocrlf = input
     preloadindex = true
     fscache = true
     fileMode = false
