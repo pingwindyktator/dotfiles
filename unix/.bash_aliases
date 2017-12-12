@@ -43,3 +43,5 @@ alias rm='rm -I --preserve-root'
 alias noh='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 alias find="find 2> >(grep -v 'Permission denied' >&2)"
 alias grep='grep -s --color'
+alias topdu='du -hsx * | sort -rh | head -10'
+alias diskfree='df -kh .'
