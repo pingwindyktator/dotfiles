@@ -4,7 +4,7 @@ platform=""
 backup_dir="$HOME/dotfilesbackup"
 
 install_unix() {
-    base_url="https://github.com/pingwindyktator/dotfiles/tree/master/unix"
+    base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
 
     for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc"; do
         if [ -f "$HOME/$dotfilename" ]; then
@@ -18,7 +18,7 @@ install_unix() {
 }
 
 install_cygwin() {
-    base_url="https://github.com/pingwindyktator/dotfiles/tree/master/cygwin"
+    base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/cygwin"
 
     for dotfilename in ".bash_aliases" ".bash_funcs" ".bashrc" ".gitconfig" ".inputrc" ".vimrc" ".vs_for_bash"; do
         if [ -f "$HOME/$dotfilename" ]; then
