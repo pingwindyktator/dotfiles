@@ -19,10 +19,12 @@ PS_USERNAME="\u"
 PS_CMD_PROMPT="\\$"
 PS_PWD="\w"
 
-HISTCONTROL=ignoreboth
+HISTCONTROL=ignoredups
 shopt -s histappend
-HISTSIZE=1000
-HISTFILESIZE=2000
+shopt -s cmdhist
+HISTSIZE=500000
+HISTFILESIZE=100000
+
 shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
