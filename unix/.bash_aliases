@@ -24,6 +24,7 @@ alias fgrep='fgrep --color=auto'              # show differences in colour
 alias ipext='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias free='free -h'
+alias tailf='tail -f'
 
 # Interactive operation...
 alias rm='rm -I'
