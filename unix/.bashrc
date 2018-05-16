@@ -25,6 +25,9 @@ shopt -s cmdhist
 HISTSIZE=500000
 HISTFILESIZE=100000
 
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
