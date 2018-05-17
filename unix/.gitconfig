@@ -8,8 +8,7 @@
 [color]
     ui = always
 [user]
-    name = <your name here>
-    email = <your email here>
+
 [credential]
     helper = cache --timeout=3600
 [alias]
