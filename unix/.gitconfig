@@ -3,7 +3,7 @@
     preloadindex = true
     fscache = true
     fileMode = false
-    excludesfile = '~/.gitignore'
+    excludesfile = ~/.gitignore
 [gc]
     auto = 256
 [color]
