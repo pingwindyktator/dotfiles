@@ -7,12 +7,6 @@ install_unix() {
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
 
     for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc"; do
-        if [ -f "$HOME/$dotfilename" ]; then
-            echo "backuping $dotfilename to $backup_dir..."
-            mkdir -p "$backup_dir"
-            mv "$HOME/$dotfilename" "$backup_dir"
-        fi
-
         wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
     done
 }
@@ -21,13 +15,6 @@ install_cygwin() {
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/cygwin"
 
     for dotfilename in ".bash_aliases" ".bash_funcs" ".bashrc" ".gitconfig" ".inputrc" ".vimrc" ".vs_for_bash"; do
-        if [ -f "$HOME/$dotfilename" ]; then
-            echo "backuping $dotfilename to $backup_dir..."
-            mkdir -p "$backup_dir"
-            mv "$HOME/$dotfilename" "$backup_dir"
-        fi
-        
-        echo "downloading $dotfilename..."
         wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
     done
 }
@@ -38,6 +25,16 @@ install_macos() {
 
 install_win() {
     echo "Windows is currently not supported"
+}
+
+backup_existing_files() {
+    mkdir -p "$backup_dir"
+    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".inputrc" ".vimrc" ".vs_for_bash"; do
+        if [ -f "$HOME/$dotfilename" ]; then
+            echo "backuping $dotfilename to $backup_dir..."
+            mv "$HOME/$dotfilename" "$backup_dir"
+        fi
+    done
 }
 
 preinstall() {
@@ -77,6 +74,11 @@ fi
 read -p "install dotfiles of $platform platform? [Y/n] "
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 0
+fi
+
+read -p "backup existing files to $backup_dir? [Y/n] "
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    backup_existing_files
 fi
 
 preinstall
