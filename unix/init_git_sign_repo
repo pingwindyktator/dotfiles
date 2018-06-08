@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set_up_global_gitconfig() {
+    git config --global gpg.program gpg2
+}
+
+set_up_local_gitconfig() {
+    git config commit.gpgsign true
+    git config log.showSignature true
+}
+
+
+set_up_global_gitconfig
+set_up_local_gitconfig
+is_signingkey_set=$(git config --get user.signingKey)
+
+if [[ ! -n "$is_signingkey_set" ]]; then
+    echo "You should set up signing key now"
+    echo "To list your gpg keys: gpg --list-keys"
+    echo "To set up global signing key: git config --global user.signingKey <signing_key>"
+    echo "To set up repository-specific signing key: git config user.signingKey <signing_key>"
+fi
+
