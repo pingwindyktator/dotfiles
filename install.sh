@@ -4,11 +4,16 @@ platform=""
 backup_dir="$HOME/dotfilesbackup"
 
 install_unix() {
+    sudo apt-get install xdotool wmctrl awk -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
+    mkdir "~/bin"
 
-    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc"; do
+    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc" "bin/init_git_sign_repo" "bin/terminal_quick_access"; do
         wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
     done
+    
+    chmod u+x ~/bin/init_git_sign_repo
+    chmod u+x ~/bin/terminal_quick_access
 }
 
 install_cygwin() {
@@ -29,10 +34,10 @@ install_win() {
 
 backup_existing_files() {
     mkdir -p "$backup_dir"
-    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".inputrc" ".vimrc" ".vs_for_bash"; do
+    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".inputrc" ".vimrc" ".vs_for_bash" "bin/init_git_sign_repo" "bin/terminal_quick_access"; do
         if [ -f "$HOME/$dotfilename" ]; then
             echo "backuping $dotfilename to $backup_dir..."
-            mv "$HOME/$dotfilename" "$backup_dir"
+            mv "$HOME/$dotfilename" "$backup_dir/$dotfilename"
         fi
     done
 }
