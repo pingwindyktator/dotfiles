@@ -6,7 +6,7 @@ backup_dir="$HOME/dotfilesbackup"
 install_unix() {
     sudo apt-get install xdotool wmctrl git vim -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
-    mkdir "$HOME/bin"
+    mkdir -p "$HOME/bin"
 
     for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc" "bin/init_git_sign_repo" "bin/terminal_quick_access"; do
         wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
