@@ -4,16 +4,16 @@ platform=""
 backup_dir="$HOME/dotfilesbackup"
 
 install_unix() {
-    sudo apt-get install xdotool wmctrl awk git vim -y
+    sudo apt-get install xdotool wmctrl git vim -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
-    mkdir "~/bin"
+    mkdir "$HOME/bin"
 
     for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc" "bin/init_git_sign_repo" "bin/terminal_quick_access"; do
         wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
     done
     
-    chmod u+x ~/bin/init_git_sign_repo
-    chmod u+x ~/bin/terminal_quick_access
+    chmod u+x "$HOME/bin/init_git_sign_repo"
+    chmod u+x "$HOME/bin/terminal_quick_access"
 }
 
 install_cygwin() {
