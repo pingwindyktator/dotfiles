@@ -4,7 +4,7 @@ platform=""
 backup_dir="$HOME/dotfilesbackup"
 
 install_unix() {
-    sudo apt-get install xdotool wmctrl awk -y
+    sudo apt-get install xdotool wmctrl awk git vim -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
     mkdir "~/bin"
 
