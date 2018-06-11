@@ -4,7 +4,8 @@ platform=""
 backup_dir="$HOME/dotfilesbackup"
 
 install_unix() {
-    sudo apt-get install xdotool wmctrl git vim -y
+    sudo apt-get install git vim -y
+    sudo apt-get install xdotool wmctrl -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
     mkdir -p "$HOME/bin"
 
