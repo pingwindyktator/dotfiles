@@ -46,3 +46,5 @@ alias find="find 2> >(grep -v 'Permission denied' >&2)"
 alias grep='grep -s --color'
 alias topdu='du -hsx * | sort -rh | head -10'
 alias diskfree='df -kh .'
+alias limitres='ulimit -v 4000000 && nice -n 19'
+alias flushswap='sudo swapoff -a && sudo swapon -a'
