@@ -23,5 +23,6 @@
     filelof = log -u
     ls = ls-files
     initsign = "! ~/bin/init_git_sign_repo"
+    resettags = "! git tag -l | xargs git tag -d && git fetch --tags"
 [gpg]
     program = gpg2
