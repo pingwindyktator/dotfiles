@@ -4,14 +4,21 @@
     fscache = true
     fileMode = false
     excludesfile = ~/.gitignore
+    
 [gc]
     auto = 256
+    
 [color]
     ui = always
+    
 [user]
-
+    # name = ...
+    # email = ...
+    # signingKey = ...
+    
 [credential]
     helper = cache --timeout=3600
+    
 [alias]
     stats = shortlog -sn --since='2 weeks' --until='now'
     diff = diff -w
@@ -24,5 +31,6 @@
     ls = ls-files
     initsign = "! ~/bin/init_git_sign_repo"
     resettags = "! git tag -l | xargs git tag -d && git fetch --tags"
+    
 [gpg]
     program = gpg2
