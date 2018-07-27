@@ -77,10 +77,29 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# pyenv
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-export PATH="~/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
 export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YELLOW}${PS_PWD}${PS_BLUE}\`parse_git_branch\`${PS_WHITE}${PS_CMD_PROMPT} ${PS_RESET}"
+
+# pyenv
+# export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+# export PATH="~/.pyenv/bin:$PATH"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+
+# cuda
+# export PATH=/usr/local/cuda-9.2/bin${PATH:+:${PATH}}
+# export LD_LIBRARY_PATH=/usr/local/cuda-9.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+# nvm
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# thefuck
+# eval $(thefuck --alias)
+# eval $(thefuck --alias FUCK)
+
+# golang
+# export PATH=/usr/lib/go-1.10/bin${PATH:+:${PATH}}
+# export GOROOT="/usr/lib/go-1.10"
+# export GOPATH="$HOME/Sources/go"
+# export PATH=$GOPATH/bin${PATH:+:${PATH}}
