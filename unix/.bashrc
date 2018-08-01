@@ -88,6 +88,7 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # cuda
 # export PATH=/usr/local/cuda-9.2/bin${PATH:+:${PATH}}
 # export LD_LIBRARY_PATH=/usr/local/cuda-9.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export CUDACXX=$(which nvcc)
 
 # nvm
 # export NVM_DIR="$HOME/.nvm"
