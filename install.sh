@@ -22,7 +22,7 @@ install_bash_for_windows() {
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/bash_for_windows/"
     mkdir -p "$HOME/bin"
 
-    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc" "bin/init_git_sign_repo"; do
+    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc" ".inputrc" "bin/init_git_sign_repo"; do
         wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
     done
     
