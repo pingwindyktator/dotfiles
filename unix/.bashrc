@@ -107,3 +107,4 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 
 # dotnet
 # export DOTNET_CLI_TELEMETRY_OPTOUT=1
+# export PATH="~/.dotnet/tools${PATH:+:${PATH}}"
