@@ -104,3 +104,6 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # export GOROOT="/usr/lib/go-1.10"
 # export GOPATH="$HOME/Sources/go"
 # export PATH=$GOPATH/bin${PATH:+:${PATH}}
+
+# dotnet
+# export DOTNET_CLI_TELEMETRY_OPTOUT=1
