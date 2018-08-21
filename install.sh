@@ -17,6 +17,18 @@ install_unix() {
     chmod u+x "$HOME/bin/terminal_quick_access"
 }
 
+install_bash_for_windows() {
+    sudo apt-get install git vim -y
+    base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/bash_for_windows/"
+    mkdir -p "$HOME/bin"
+
+    for dotfilename in ".bash_aliases" ".bash_funcs" ".bash_profile" ".bashrc" ".gitconfig" ".vimrc" "bin/init_git_sign_repo"; do
+        wget -q "$base_url/$dotfilename" -O "$HOME/$dotfilename"
+    done
+    
+    chmod u+x "$HOME/bin/init_git_sign_repo"
+}
+
 install_cygwin() {
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/cygwin"
 
@@ -55,6 +67,10 @@ postinstall() {
 if [[ "$(uname)" == "Darwin" ]]; then
     platform="macos"
     func=install_macos
+
+elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
+    platform="bash_for_windows"
+    func=install_bash_for_windows
 
 elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
     platform="unix"
