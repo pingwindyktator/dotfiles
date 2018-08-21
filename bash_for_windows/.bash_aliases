@@ -20,7 +20,6 @@ alias li='l *'
 alias less='less -r'                          # raw control characters
 alias whence='type -a'                        # where, of a sort
 alias ipext='curl -s http://checkip.dyndns.org/ | grep -o '[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9]*''
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias free='free -h'
 alias tailf='tail -f'
 
@@ -44,6 +43,5 @@ alias find="find 2> >(grep -v 'Permission denied' >&2)"
 alias grep='grep -s --color'
 alias topdu='du -hsx * | sort -rh | head -10'
 alias diskfree='df -kh .'
-alias limitres='ulimit -v 4000000 && nice -n 19'
-alias flushswap='sudo swapoff -a && sudo swapon -a'
 alias dmesg='dmesg -T'
+alias utf8='chcp.com 65001 & bash'
