@@ -28,6 +28,9 @@ HISTFILESIZE=100000
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+# Use case-insensitive filename globbing
+shopt -s nocaseglob
+
 shopt -s checkwinsize
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
