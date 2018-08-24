@@ -16,7 +16,8 @@ is_signingkey_set=$(git config --get user.signingKey)
 
 if [[ ! -n "$is_signingkey_set" ]]; then
     echo "You should set up signing key now"
-    echo "To list your gpg keys: gpg --list-keys"
+    echo "To generate new key: gpg2 --full-gen-key"
+    echo "To list your gpg keys: gpg2 --list-keys"
     echo "To set up global signing key: git config --global user.signingKey <signing_key>"
     echo "To set up repository-specific signing key: git config user.signingKey <signing_key>"
 fi
