@@ -27,6 +27,7 @@ HISTFILESIZE=100000
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
+export GPG_TTY=$(tty)
 
 # Use case-insensitive filename globbing
 shopt -s nocaseglob
