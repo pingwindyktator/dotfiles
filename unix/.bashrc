@@ -17,6 +17,7 @@ PS_CYAN='\[\033[1;36m\]'
 PS_CLOCK="\A"
 PS_USERNAME="\u"
 PS_CMD_PROMPT="\\$"
+PS_HOSTNAME="\H"
 PS_PWD="\w"
 
 HISTCONTROL=ignoredups
