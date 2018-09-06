@@ -5,7 +5,7 @@ backup_dir="$HOME/dotfilesbackup"
 
 install_unix() {
     sudo apt-get install git vim -y
-    sudo apt-get install xdotool wmctrl -y
+    sudo apt-get install xdotool wmctrl colordiff -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/unix/"
     mkdir -p "$HOME/bin"
 
@@ -18,7 +18,7 @@ install_unix() {
 }
 
 install_bash_for_windows() {
-    sudo apt-get install git vim -y
+    sudo apt-get install git vim colordiff -y
     base_url="https://raw.githubusercontent.com/pingwindyktator/dotfiles/master/bash_for_windows/"
     mkdir -p "$HOME/bin"
 
