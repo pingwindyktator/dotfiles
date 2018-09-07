@@ -91,8 +91,11 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # eval "$(pyenv virtualenv-init -)"
 
 # cuda
-# export PATH=/usr/local/cuda-9.2/bin${PATH:+:${PATH}}
-# export LD_LIBRARY_PATH=/usr/local/cuda-9.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export CUDA_HOME=/usr/local/cuda-9.2
+# export PATH=${CUDA_HOME}/bin${PATH:+:${PATH}}
+# export C_INCLUDE_PATH=${CUDA_HOME}/include:${C_INCLUDE_PATH}
+# export LD_LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 # export CUDACXX=$(which nvcc)
 
 # nvm
