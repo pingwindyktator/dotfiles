@@ -74,6 +74,10 @@ if [ -f ~/.bash_funcs ]; then
   . ~/.bash_funcs
 fi
 
+if [ -f ~/.pythonrc ]; then
+  export PYTHONSTARTUP=~/.pythonrc
+fi
+
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     . /usr/share/bash-completion/bash_completion
