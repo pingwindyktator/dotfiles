@@ -1,13 +1,15 @@
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    alias ls="ls --color=auto 2> >(grep -Ev 'Brak dostępu|Brak dostępu|Permission denied' >&2)"
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto'
 
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
+else
+    alias ls="ls 2> >(grep -Ev 'Brak dostępu|Brak dostępu|Permission denied' >&2)"
 fi
 
 # some more ls aliases
@@ -39,7 +41,7 @@ alias mkdir='mkdir -pv'
 alias diff='colordiff'
 alias rm='rm -I --preserve-root'
 alias noh='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
-alias find="find 2> >(grep -v 'Permission denied' >&2)"
+alias find="find 2> >(grep -Ev 'Brak dostępu|Brak dostępu|Permission denied' >&2)"
 alias grep='grep -s --color'
 alias topdu='du -hsx * | sort -rh | head -10'
 alias diskfree='df -kh .'
