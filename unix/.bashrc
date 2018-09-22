@@ -70,6 +70,10 @@ if [ -f ~/.bash_funcs ]; then
   . ~/.bash_funcs
 fi
 
+if [ -f ~/.privaterc ]; then
+  . ~/.privaterc
+fi
+
 if [ -f ~/.pythonrc ]; then
   export PYTHONSTARTUP=~/.pythonrc
 fi
@@ -91,7 +95,7 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # eval "$(pyenv virtualenv-init -)"
 
 # cuda
-# export CUDA_HOME=/usr/local/cuda-9.2
+# export CUDA_HOME=/usr/local/cuda
 # export PATH=${CUDA_HOME}/bin${PATH:+:${PATH}}
 # export C_INCLUDE_PATH=${CUDA_HOME}/include:${C_INCLUDE_PATH}
 # export LD_LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
@@ -108,10 +112,10 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # eval $(thefuck --alias FUCK)
 
 # golang
-# export PATH=/usr/lib/go-1.10/bin${PATH:+:${PATH}}
-# export GOROOT="/usr/lib/go-1.10"
-# export GOPATH="$HOME/Sources/go"
-# export PATH=$GOPATH/bin${PATH:+:${PATH}}
+# export GOROOT="/usr/lib/go"
+# export GOPATH=${HOME}/Sources/go
+# export PATH=${GOROOT}/bin${PATH:+:${PATH}}
+# export PATH=${GOPATH}/bin${PATH:+:${PATH}}
 
 # dotnet
 # export DOTNET_CLI_TELEMETRY_OPTOUT=1
