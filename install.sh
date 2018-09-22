@@ -52,7 +52,7 @@ preinstall() {
     git config core.sparseCheckout true
     echo ${platform} >> .git/info/sparse-checkout
     git pull -q origin master
-    cd ${platform}
+    cd ${platform} > /dev/null
 
     read -r -p "Enter git user.name: " response
     find -type f | xargs -i sed -i "s/##git_name##/${response}/g" {}
