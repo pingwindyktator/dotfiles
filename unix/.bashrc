@@ -112,7 +112,7 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # eval $(thefuck --alias FUCK)
 
 # golang
-# export GOROOT="/usr/lib/go"
+# export GOROOT="/usr/local/go"
 # export GOPATH=${HOME}/Sources/go
 # export PATH=${GOROOT}/bin${PATH:+:${PATH}}
 # export PATH=${GOPATH}/bin${PATH:+:${PATH}}
