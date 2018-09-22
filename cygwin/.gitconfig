@@ -3,18 +3,25 @@
     preloadindex = true
     fscache = true
     fileMode = false
+
+[user]
+    name = ##git_name##
+    email = ##git_email##
+    signingKey = ##git_signingKey##
+
 [gc]
     auto = 256
+
 [color]
     ui = always
-[user]
 
 [credential]
     helper = cache --timeout=3600
+
 [alias]
     stats = shortlog -sn --since='2 weeks' --until='now'
     diff = diff -w
-    today = log --since=00:00:00 --all --no-merges --oneline --author=<you'r email here>
+    today = log --since=00:00:00 --all --no-merges --oneline --author=##git_email##
     graph = log --graph --all --decorate --stat --date=iso
     stage = add
     unstage = reset
