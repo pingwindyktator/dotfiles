@@ -5,15 +5,51 @@ backup_dir="$HOME/dotfilesbackup"
 update_dir="$HOME/.dotfiles"
 
 confirm() {
-    read -r -p "${1} [y/N] " response
-    case "$response" in
-        [yY][eE][sS]|[yY])
-            true
-            ;;
-        *)
-            false
-            ;;
-    esac
+    local prompt default reply
+    prompt="${1}"
+
+    if [ "${2:-}" = "Y" ]; then
+        pdefault="Y/n"
+        default=Y
+    elif [ "${2:-}" = "N" ]; then
+        pdefault="y/N"
+        default=N
+    else
+        pdefault="y/n"
+        default=
+    fi
+
+    while true; do
+
+        # Ask the question (not using "read -p" as it uses stderr not stdout)
+        echo -n "$prompt [$pdefault] "
+
+        # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+        read reply </dev/tty
+
+        # Default?
+        if [ -z "$reply" ]; then
+            reply=$default
+        fi
+
+        # Check if the reply is valid
+        case "$reply" in
+            Y*|y*) return 0 ;;
+            N*|n*) return 1 ;;
+        esac
+
+    done
+}
+
+confirm_string() {
+    local prompt default reply
+    prompt="${1}"
+    default="${2}"
+    [[ ! -z "${default// }" ]] && pdefault=" [${default}]" || pdefault=""
+
+    # Ask the question (not using "read -p" as it uses stderr not stdout)
+    read -r -p "$prompt$pdefault " reply
+    echo ${reply:-$default}
 }
 
 generic_install() {
@@ -59,11 +95,13 @@ preinstall() {
     git pull -q origin master
     cd ${platform} > /dev/null
 
-    read -r -p "Enter git user.name: " response
+    response=$(confirm_string "Enter git user.name" $(git config --get user.name))
     find -type f | xargs -i sed -i "s/##git_name##/${response}/g" {}
-    read -r -p "Enter git user.email: " response
+
+    response=$(confirm_string "Enter git user.email" $(git config --get user.email))
     find -type f | xargs -i sed -i "s/##git_email##/${response}/g" {}
-    read -r -p "Enter git user.signingKey: " response
+
+    response=$(confirm_string "Enter git user.signingKey" $(git config --get user.signingKey))
     find -type f | xargs -i sed -i "s/##git_signingKey##/${response}/g" {}
 }
 
@@ -88,9 +126,10 @@ else
     exit 1
 fi
 
-confirm "Install dotfiles of $platform platform?" || exit 0
+confirm "Install dotfiles of $platform platform?" Y || exit 0
 preinstall
-confirm "Backup existing files to $backup_dir?" && backup_existing_files
-confirm "View diff of replaces files?" && view_diff
+confirm "Backup existing files to $backup_dir?" N && backup_existing_files
+confirm "View diff of replaces files?" N && view_diff
 install_${platform}
 postinstall
+echo "Done!"
