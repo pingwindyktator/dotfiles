@@ -44,6 +44,11 @@ backup_existing_files() {
     find -type f | xargs -i cp ${HOME}/{} ${backup_dir}/{} 2> /dev/null
 }
 
+view_diff() {
+    cd ${update_dir}/${platform} > /dev/null
+    find -type f | xargs -i diff {} ${HOME}/{} 2> /dev/null
+}
+
 preinstall() {
     mkdir -p ${update_dir}
     cd ${update_dir} > /dev/null
@@ -86,5 +91,6 @@ fi
 confirm "Install dotfiles of $platform platform?" || exit 0
 preinstall
 confirm "Backup existing files to $backup_dir?" && backup_existing_files
+confirm "View diff of replaces files?" && view_diff
 install_${platform}
 postinstall
