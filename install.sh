@@ -45,10 +45,14 @@ confirm_string() {
     local prompt default reply
     prompt="${1}"
     default="${2}"
+
+    # Default?
     [[ ! -z "${default// }" ]] && pdefault=" [${default}]" || pdefault=""
 
-    # Ask the question (not using "read -p" as it uses stderr not stdout)
+    # Ask the question
     read -r -p "$prompt$pdefault " reply
+
+    # Empty reply?
     echo ${reply:-$default}
 }
 
