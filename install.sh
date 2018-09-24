@@ -168,6 +168,8 @@ assert_compatibility() {
         >&2 echo "Requires git version 1.7.0 or higher, you've got $(git --version | awk '{print $3}')"
         return 1
     fi
+    
+    return 0
 }
 
 main() {
