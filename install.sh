@@ -169,12 +169,6 @@ assert_compatibility() {
         return 1
     fi
     
-    if (( ${BASH_VERSION%%.*} < 4 )) ; then
-        >&2 echo "Requires bash version 4.0.0 or higher, you've got ${BASH_VERSION}"
-        return 1
-    fi
-    
-        
     if [[ "${platform}" == "bash_for_windows" ]]; then
         return 0
         
@@ -193,15 +187,24 @@ assert_compatibility() {
     fi
 }
 
+main() {
+    detect_platform || exit 1
+    confirm "Install dotfiles of $platform platform?" Y || exit 0
+    install_system_package "${system_deps}" || exit 1
+    assert_compatibility || exit 1
+    preinstall
+    confirm "View diff of replaced files?" N && view_diff
+    confirm "Backup existing files to $backup_dir?" N && backup_existing_files
+    generic_install
+    postinstall && echo "Done!"
+}
 
 
 
-detect_platform || exit 1
-confirm "Install dotfiles of $platform platform?" Y || exit 0
-install_system_package "${system_deps}" || exit 1
-assert_compatibility || exit 1
-preinstall
-confirm "Backup existing files to $backup_dir?" N && backup_existing_files
-confirm "View diff of replaced files?" N && view_diff
-generic_install
-postinstall && echo "Done!"
+
+if (( ${BASH_VERSION%%.*} < 4 )) ; then
+    >&2 echo "Requires bash version 4.0.0 or higher, you've got ${BASH_VERSION}"
+    return 1
+fi
+
+main
