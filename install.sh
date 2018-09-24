@@ -90,7 +90,8 @@ view_diff() {
 }
 
 preinstall() {
-    sudo apt-get install git
+    sudo apt-get update
+    sudo apt-get install git -y
     
     mkdir -p ${update_dir}
     cd ${update_dir} > /dev/null
