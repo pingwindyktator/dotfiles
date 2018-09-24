@@ -133,7 +133,7 @@ fi
 confirm "Install dotfiles of $platform platform?" Y || exit 0
 preinstall
 confirm "Backup existing files to $backup_dir?" N && backup_existing_files
-confirm "View diff of replaces files?" N && view_diff
+confirm "View diff of replaced files?" N && view_diff
 install_${platform}
 postinstall
 echo "Done!"
