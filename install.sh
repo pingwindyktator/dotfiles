@@ -5,7 +5,7 @@ backup_dir="$HOME/dotfilesbackup"
 update_dir="$HOME/.dotfiles"
 
 confirm() {
-    local prompt default reply
+    local prompt default reply pdefault
     prompt="${1}"
 
     if [ "${2:-}" = "Y" ]; then
@@ -42,7 +42,7 @@ confirm() {
 }
 
 confirm_string() {
-    local prompt default reply
+    local prompt default reply pdefault
     prompt="${1}"
     default="${2}"
 
