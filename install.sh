@@ -90,6 +90,8 @@ view_diff() {
 }
 
 preinstall() {
+    sudo apt-get install git
+    
     mkdir -p ${update_dir}
     cd ${update_dir} > /dev/null
     git init -q
