@@ -144,12 +144,12 @@ postinstall() {
 detect_platform() {
     if [[ "$(expr substr $(uname -s) 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
-        system_deps="git vim colordiff"
+        system_deps="git vim colordiff mawk gawk"
         return 0
 
     elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
         platform="unix"
-        system_deps="git vim colordiff xdotool wmctrl"
+        system_deps="git vim colordiff xdotool wmctrl mawk gawk"
         return 0
 
     elif [[ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]]; then
