@@ -116,23 +116,29 @@ postinstall() {
     rm -rf ${update_dir}
 }
 
+detect_platform() {
+    if [[ "$(expr substr $(uname -s) 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
+        platform="bash_for_windows"
+        return 0
+
+    elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
+        platform="unix"
+        return 0
+
+    elif [[ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]]; then
+        platform="cygwin"
+        return 0
+
+    else
+        echo "Unknown platform"
+        return 1
+    fi
+}
 
 
 
-if [[ "$(expr substr $(uname -s) 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
-    platform="bash_for_windows"
 
-elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
-    platform="unix"
-
-elif [[ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]]; then
-    platform="cygwin"
-
-else
-    echo "unknown platform"
-    exit 1
-fi
-
+detect_platform || exit 1
 confirm "Install dotfiles of $platform platform?" Y || exit 0
 preinstall
 confirm "Backup existing files to $backup_dir?" N && backup_existing_files
