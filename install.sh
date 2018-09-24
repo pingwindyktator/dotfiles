@@ -3,6 +3,38 @@
 platform=""
 backup_dir="$HOME/dotfilesbackup"
 update_dir="$HOME/.dotfiles"
+system_deps=""
+
+install_system_package() {
+    [[ -z "${@// }" ]] && return 0
+    
+    if [[ "${platform}" == "bash_for_windows" ]] || [[ "${platform}" == "unix" ]]; then        
+        if [ -n "$(command -v apt-get)" ]; then
+            sudo apt-get update -qq && sudo apt-get install ${@} -y
+        elif [ -n "$(command -v yum)" ]; then
+            sudo yum update && sudo yum install ${@}
+        else
+            >&2 echo "Installing system packages currently not compatibile with your package manager"
+            return 1
+        fi
+        
+    elif [[ "${platform}" == "cygwin" ]]; then
+        if [ -n "$(command -v apt-cyg)" ]; then
+            apt-cyg update && apt-cyg install ${@}
+        elif [ -n "$(command -v cyg-apt)" ]; then
+            cyg-apt update && cyg-apt install ${@}
+        elif [ -n "$(command -v cyg-get)" ]; then
+            cyg-get ${@}
+        else
+            >&2 echo "Installing system packages currently not compatibile with your package manager"
+            return 1
+        fi
+        
+    else
+        >&2 echo "Unknown platform"
+        return 1
+    fi
+}
 
 confirm() {
     local prompt default reply pdefault
@@ -28,7 +60,7 @@ confirm() {
         read reply </dev/tty
 
         # Default?
-        if [ -z "$reply" ]; then
+        if [ -z "${reply// }" ]; then
             reply=$default
         fi
 
@@ -58,29 +90,22 @@ confirm_string() {
 
 generic_install() {
     cd ${update_dir}/${platform} > /dev/null
+    
+    # Create directory structure in $HOME
     find . ! -path . -and ! -path './.git/*' -and ! -path './.git' -type d | xargs -i mkdir -p ${HOME}/{}
+    
+    # Copy files to $HOME
     find -type f | xargs -i cp {} ${HOME}/{}
-}
-
-install_unix() {
-    sudo apt-get install git vim -y
-    sudo apt-get install xdotool wmctrl colordiff -y
-    generic_install
-}
-
-install_bash_for_windows() {
-    sudo apt-get install git vim colordiff -y
-    generic_install
-}
-
-install_cygwin() {
-    generic_install
 }
 
 backup_existing_files() {
     mkdir -p ${backup_dir}
     cd ${update_dir}/${platform} > /dev/null
+    
+    # Create directory structure in $backup_dir
     find . ! -path . -and ! -path './.git/*' -and ! -path './.git' -type d | xargs -i mkdir -p ${backup_dir}/{}
+    
+    # Copy files to $backup_dir
     find -type f | xargs -i cp ${HOME}/{} ${backup_dir}/{} 2> /dev/null
 }
 
@@ -90,9 +115,6 @@ view_diff() {
 }
 
 preinstall() {
-    sudo apt-get update
-    sudo apt-get install git -y
-    
     mkdir -p ${update_dir}
     cd ${update_dir} > /dev/null
     git init -q
@@ -114,23 +136,59 @@ preinstall() {
 
 postinstall() {
     rm -rf ${update_dir}
+    
+    # No need for `sudo` anymore
+    sudo -k
 }
 
 detect_platform() {
     if [[ "$(expr substr $(uname -s) 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
+        system_deps="git vim colordiff"
         return 0
 
     elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
         platform="unix"
+        system_deps="git vim colordiff xdotool wmctrl"
         return 0
 
     elif [[ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]]; then
         platform="cygwin"
+        system_deps=""
         return 0
 
     else
-        echo "Unknown platform"
+        >&2 echo "Unknown platform"
+        return 1
+    fi
+}
+
+assert_compatibility() {
+    if [[ ! $(git --version | awk '{print $3}') > 1.7.0 ]]; then
+        >&2 echo "Requires git version 1.7.0 or higher, you've got $(git --version | awk '{print $3}')"
+        return 1
+    fi
+    
+    if (( ${BASH_VERSION%%.*} < 4 )) ; then
+        >&2 echo "Requires bash version 4.0.0 or higher, you've got ${BASH_VERSION}"
+        return 1
+    fi
+    
+        
+    if [[ "${platform}" == "bash_for_windows" ]]; then
+        return 0
+        
+    elif [[ "${platform}" == "unix" ]]; then
+        if [[ ! "$(cat /etc/issue)" =~ "Ubuntu"* ]]; then
+            >&2 echo "Only Ubuntu is supported currently"
+            return 1
+        fi
+        
+    elif [[ "${platform}" == "cygwin" ]]; then
+        return 0
+        
+    else
+        >&2 echo "Unknown platform"
         return 1
     fi
 }
@@ -140,9 +198,10 @@ detect_platform() {
 
 detect_platform || exit 1
 confirm "Install dotfiles of $platform platform?" Y || exit 0
+install_system_package "${system_deps}" || exit 1
+assert_compatibility || exit 1
 preinstall
 confirm "Backup existing files to $backup_dir?" N && backup_existing_files
 confirm "View diff of replaced files?" N && view_diff
-install_${platform}
-postinstall
-echo "Done!"
+generic_install
+postinstall && echo "Done!"
