@@ -168,23 +168,6 @@ assert_compatibility() {
         >&2 echo "Requires git version 1.7.0 or higher, you've got $(git --version | awk '{print $3}')"
         return 1
     fi
-    
-    if [[ "${platform}" == "bash_for_windows" ]]; then
-        return 0
-        
-    elif [[ "${platform}" == "unix" ]]; then
-        if [[ ! "$(cat /etc/issue)" =~ "Ubuntu"* ]]; then
-            >&2 echo "Only Ubuntu is supported currently"
-            return 1
-        fi
-        
-    elif [[ "${platform}" == "cygwin" ]]; then
-        return 0
-        
-    else
-        >&2 echo "Unknown platform"
-        return 1
-    fi
 }
 
 main() {
