@@ -6,13 +6,13 @@ update_dir="$HOME/.dotfiles"
 system_deps=""
 
 install_system_package() {
-    [[ -z "${@// }" ]] && return 0
+    [[ -z "${*// }" ]] && return 0
     
     if [[ "${platform}" == "bash_for_windows" ]] || [[ "${platform}" == "unix" ]]; then        
         if [ -n "$(command -v apt-get)" ]; then
-            sudo apt-get update -qq && sudo apt-get install ${@} -y
+            sudo apt-get update -qq && sudo apt-get install "${@}" -y
         elif [ -n "$(command -v yum)" ]; then
-            sudo yum update && sudo yum install ${@}
+            sudo yum update && sudo yum install "${@}"
         else
             >&2 echo "Installing system packages currently not compatibile with your package manager"
             return 1
@@ -20,11 +20,11 @@ install_system_package() {
         
     elif [[ "${platform}" == "cygwin" ]]; then
         if [ -n "$(command -v apt-cyg)" ]; then
-            apt-cyg update && apt-cyg install ${@}
+            apt-cyg update && apt-cyg install "${@}"
         elif [ -n "$(command -v cyg-apt)" ]; then
-            cyg-apt update && cyg-apt install ${@}
+            cyg-apt update && cyg-apt install "${@}"
         elif [ -n "$(command -v cyg-get)" ]; then
-            cyg-get ${@}
+            cyg-get "${@}"
         else
             >&2 echo "Installing system packages currently not compatibile with your package manager"
             return 1
@@ -57,12 +57,10 @@ confirm() {
         echo -n "$prompt [$pdefault] "
 
         # Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
-        read reply </dev/tty
+        read -r reply </dev/tty
 
         # Default?
-        if [ -z "${reply// }" ]; then
-            reply=$default
-        fi
+        [ -z "${reply// }" ] && reply=$default
 
         # Check if the reply is valid
         case "$reply" in
@@ -79,80 +77,80 @@ confirm_string() {
     default="${2}"
 
     # Default?
-    [[ ! -z "${default// }" ]] && pdefault=" [${default}]" || pdefault=""
+    [[ -n "${default// }" ]] && pdefault=" [${default}]" || pdefault=""
 
     # Ask the question
     read -r -p "$prompt$pdefault " reply
 
     # Empty reply?
-    echo ${reply:-$default}
+    echo "${reply:-$default}"
 }
 
 generic_install() {
-    cd ${update_dir}/${platform} > /dev/null
+    cd "${update_dir}/${platform}" > /dev/null || return
     
     # Create directory structure in $HOME
-    find . ! -path . -and ! -path './.git/*' -and ! -path './.git' -type d | xargs -i mkdir -p ${HOME}/{}
+    find . ! -path . -and ! -path "./.git/*" -and ! -path "./.git" -type d | xargs -i mkdir -p "${HOME}/{}"
     
     # Copy files to $HOME
-    find -type f | xargs -i cp {} ${HOME}/{}
+    find . -type f | xargs -i cp "{}" "${HOME}/{}"
 }
 
 backup_existing_files() {
-    mkdir -p ${backup_dir}
-    cd ${update_dir}/${platform} > /dev/null
+    mkdir -p "${backup_dir}"
+    cd "${update_dir}/${platform}" > /dev/null || return
     
     # Create directory structure in $backup_dir
-    find . ! -path . -and ! -path './.git/*' -and ! -path './.git' -type d | xargs -i mkdir -p ${backup_dir}/{}
+    find . ! -path . -and ! -path "./.git/*" -and ! -path "./.git" -type d | xargs -i mkdir -p "${backup_dir}/{}"
     
     # Copy files to $backup_dir
-    find -type f | xargs -i cp ${HOME}/{} ${backup_dir}/{} 2> /dev/null
+    find . -type f | xargs -i cp "${HOME}/{}" "${backup_dir}/{}" 2> /dev/null
 }
 
 view_diff() {
-    cd ${update_dir}/${platform} > /dev/null
-    find -type f | xargs -i diff {} ${HOME}/{} 2> /dev/null
+    cd "${update_dir}/${platform}" > /dev/null || return
+    find . -type f | xargs -i diff "{}" "${HOME}/{}" 2> /dev/null
 }
 
 preinstall() {
-    mkdir -p ${update_dir}
-    cd ${update_dir} > /dev/null
+    mkdir -p "${update_dir}"
+    cd "${update_dir}" > /dev/null || return
     git init -q
     git remote add -f origin https://github.com/pingwindyktator/dotfiles > /dev/null
     git config core.sparseCheckout true
-    echo ${platform} >> .git/info/sparse-checkout
+    echo "${platform}" >> .git/info/sparse-checkout
     git pull -q origin master
-    cd ${platform} > /dev/null
+    cd "${platform}" > /dev/null || return
 
-    response=$(confirm_string "Enter git user.name" $(git config --get user.name))
-    find -type f | xargs -i sed -i "s/##git_name##/${response}/g" {}
+    response=$(confirm_string "Enter git user.name" "$(git config --get user.name)")
+    find . -type f | xargs -i sed -i "s/##git_name##/${response}/g" "{}"
 
-    response=$(confirm_string "Enter git user.email" $(git config --get user.email))
-    find -type f | xargs -i sed -i "s/##git_email##/${response}/g" {}
+    response=$(confirm_string "Enter git user.email" "$(git config --get user.email)")
+    find . -type f | xargs -i sed -i "s/##git_email##/${response}/g" "{}"
 
-    response=$(confirm_string "Enter git user.signingKey" $(git config --get user.signingKey))
-    find -type f | xargs -i sed -i "s/##git_signingKey##/${response}/g" {}
+    response=$(confirm_string "Enter git user.signingKey" "$(git config --get user.signingKey)")
+    find . -type f | xargs -i sed -i "s/##git_signingKey##/${response}/g" "{}"
 }
 
 postinstall() {
-    rm -rf ${update_dir}
+    rm -rf "${update_dir}"
     
     # No need for `sudo` anymore
     sudo -k
 }
 
 detect_platform() {
-    if [[ "$(expr substr $(uname -s) 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
+    if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
         system_deps="git vim colordiff mawk gawk"
         return 0
 
-    elif [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]]; then
+    elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
         system_deps="git vim colordiff xdotool wmctrl mawk gawk"
         return 0
 
-    elif [[ "$(expr substr $(uname -s) 1 9)" == "CYGWIN_NT" ]]; then
+    elif [[ "$(expr substr "$(uname -s)" 1 9)" == "CYGWIN_NT" ]]; then
         platform="cygwin"
         system_deps=""
         return 0
