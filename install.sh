@@ -10,9 +10,9 @@ install_system_package() {
     
     if [[ "${platform}" == "bash_for_windows" ]] || [[ "${platform}" == "unix" ]]; then        
         if [ -n "$(command -v apt-get)" ]; then
-            sudo apt-get update -qq && sudo apt-get install "${@}" -y
+            sudo apt-get update -qq && sudo apt-get install ${@} -y
         elif [ -n "$(command -v yum)" ]; then
-            sudo yum update && sudo yum install "${@}"
+            sudo yum update && sudo yum install ${@}
         else
             >&2 echo "Installing system packages currently not compatibile with your package manager"
             return 1
@@ -20,11 +20,11 @@ install_system_package() {
         
     elif [[ "${platform}" == "cygwin" ]]; then
         if [ -n "$(command -v apt-cyg)" ]; then
-            apt-cyg update && apt-cyg install "${@}"
+            apt-cyg update && apt-cyg install ${@}
         elif [ -n "$(command -v cyg-apt)" ]; then
-            cyg-apt update && cyg-apt install "${@}"
+            cyg-apt update && cyg-apt install ${@}
         elif [ -n "$(command -v cyg-get)" ]; then
-            cyg-get "${@}"
+            cyg-get ${@}
         else
             >&2 echo "Installing system packages currently not compatibile with your package manager"
             return 1
