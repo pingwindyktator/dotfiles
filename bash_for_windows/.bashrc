@@ -94,22 +94,22 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 
 # pyenv
 # export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-# export PATH="~/.pyenv/bin:$PATH"
+# export PATH="${HOME}/.pyenv/bin:${PATH}"
 # eval "$(pyenv init -)"
 # eval "$(pyenv virtualenv-init -)"
 
 # cuda
-# export CUDA_HOME=/usr/local/cuda
-# export PATH=${CUDA_HOME}/bin${PATH:+:${PATH}}
-# export C_INCLUDE_PATH=${CUDA_HOME}/include:${C_INCLUDE_PATH}
-# export LD_LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-# export LIBRARY_PATH=${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+# export CUDA_HOME="/usr/local/cuda"
+# export PATH="${CUDA_HOME}/bin${PATH:+:${PATH}}"
+# export C_INCLUDE_PATH="${CUDA_HOME}/include:${C_INCLUDE_PATH}"
+# export LD_LIBRARY_PATH="${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+# export LIBRARY_PATH="${CUDA_HOME}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 # export CUDACXX=$(which nvcc)
 
 # nvm
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# export NVM_DIR="${HOME}/.nvm"
+# [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
+# [ -s "${NVM_DIR}/bash_completion" ] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 
 # thefuck
 # eval $(thefuck --alias)
@@ -117,10 +117,10 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 
 # golang
 # export GOROOT="/usr/local/go"
-# export GOPATH=${HOME}/Sources/go
-# export PATH=${GOROOT}/bin${PATH:+:${PATH}}
-# export PATH=${GOPATH}/bin${PATH:+:${PATH}}
+# export GOPATH="${HOME}/Sources/go"
+# export PATH="${GOROOT}/bin${PATH:+:${PATH}}"
+# export PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 
 # dotnet
 # export DOTNET_CLI_TELEMETRY_OPTOUT=1
-# export PATH="~/.dotnet/tools${PATH:+:${PATH}}"
+# export PATH="${HOME}/.dotnet/tools${PATH:+:${PATH}}"
