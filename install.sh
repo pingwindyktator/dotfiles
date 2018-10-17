@@ -1,8 +1,8 @@
 #!/bin/bash
 
 platform=""
-backup_dir="$HOME/dotfilesbackup"
-update_dir="$HOME/.dotfiles"
+backup_dir="${HOME}/dotfilesbackup"
+update_dir="${HOME}/.dotfiles"
 system_deps=""
 
 install_system_package() {
@@ -97,7 +97,7 @@ generic_install() {
 }
 
 backup_existing_files() {
-    mkdir -p "${backup_dir}"
+    mkdir -p "${backup_dir}" || return
     cd "${update_dir}/${platform}" > /dev/null || return
     
     # Create directory structure in $backup_dir
@@ -113,7 +113,7 @@ view_diff() {
 }
 
 preinstall() {
-    mkdir -p "${update_dir}"
+    mkdir -p "${update_dir}" || return
     cd "${update_dir}" > /dev/null || return
     git init -q
     git remote add -f origin https://github.com/pingwindyktator/dotfiles > /dev/null
