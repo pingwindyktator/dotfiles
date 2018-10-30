@@ -13,19 +13,17 @@ set shiftwidth=4
 set tabstop=4
 set expandtab
 set nocp
-filetype off
-
-" Vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
-
-" Plugins
-Plugin 'git@github.com:bogado/file-line.git'
-
-" Vundle
-call vundle#end()
+filetype plugin on
 filetype plugin indent on
+syntax on
+
+" Return to last edit position when opening files
+autocmd BufReadPost *
+            \ if line("'\"") > 0 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
+
+execute pathogen#infect()
 
 set diffexpr=MyDiff()
 function MyDiff()
@@ -56,4 +54,3 @@ function MyDiff()
     let &shellxquote=l:shxq_sav
   endif
 endfunction
-
