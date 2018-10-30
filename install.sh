@@ -94,6 +94,10 @@ generic_install() {
     
     # Copy files to $HOME
     find . -type f | xargs -i cp "{}" "${HOME}/{}"
+    
+    # Vundle - vim plugin manager
+    git clone https://github.com/VundleVim/Vundle.vim.git "${HOME}/.vim/bundle/Vundle.vim" && \
+    vim +PluginInstall +qall 2> /dev/null > /dev/null
 }
 
 backup_existing_files() {
