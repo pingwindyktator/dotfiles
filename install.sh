@@ -131,9 +131,9 @@ preinstall() {
     response=$(confirm_string "Enter git user.signingKey" "$(git config --get user.signingKey)")
     find . -type f | xargs -i sed -i "s/##git_signingKey##/${response}/g" "{}"
     
-    # Vundle - vim plugin manager
-    git clone https://github.com/VundleVim/Vundle.vim.git "${HOME}/.vim/bundle/Vundle.vim" && \
-    vim +PluginInstall +qall 2> /dev/null > /dev/null
+    # pathogen - vim plugin manager
+    mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/bundle" && \
+    curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 }
 
 postinstall() {
