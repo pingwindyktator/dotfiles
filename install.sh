@@ -94,10 +94,6 @@ generic_install() {
     
     # Copy files to $HOME
     find . -type f | xargs -i cp "{}" "${HOME}/{}"
-    
-    # Vundle - vim plugin manager
-    git clone https://github.com/VundleVim/Vundle.vim.git "${HOME}/.vim/bundle/Vundle.vim" && \
-    vim +PluginInstall +qall 2> /dev/null > /dev/null
 }
 
 backup_existing_files() {
@@ -134,6 +130,10 @@ preinstall() {
 
     response=$(confirm_string "Enter git user.signingKey" "$(git config --get user.signingKey)")
     find . -type f | xargs -i sed -i "s/##git_signingKey##/${response}/g" "{}"
+    
+    # Vundle - vim plugin manager
+    git clone https://github.com/VundleVim/Vundle.vim.git "${HOME}/.vim/bundle/Vundle.vim" && \
+    vim +PluginInstall +qall 2> /dev/null > /dev/null
 }
 
 postinstall() {
