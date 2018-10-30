@@ -8,18 +8,15 @@ set expandtab
 set nocp
 set nu
 set hlsearch
-filetype off 
+filetype plugin on
+filetype plugin indent on
 syntax on
 cmap w!! w !sudo tee > /dev/null %
 
-" Vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'VundleVim/Vundle.vim'
+" Return to last edit position when opening files
+autocmd BufReadPost *
+            \ if line("'\"") > 0 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
 
-" Plugins
-Plugin 'git@github.com:bogado/file-line.git'
-
-" Vundle
-call vundle#end()
-filetype plugin indent on
+execute pathogen#infect()
