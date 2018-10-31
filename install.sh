@@ -130,10 +130,6 @@ preinstall() {
 
     response=$(confirm_string "Enter git user.signingKey" "$(git config --get user.signingKey)")
     find . -type f | xargs -i sed -i "s/##git_signingKey##/${response}/g" "{}"
-    
-    # pathogen - vim plugin manager
-    mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/bundle" && \
-    curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 }
 
 postinstall() {
@@ -146,17 +142,17 @@ postinstall() {
 detect_platform() {
     if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
-        system_deps="git vim colordiff mawk gawk"
+        system_deps="git vim colordiff mawk gawk silversearcher-ag the_silver_searcher"
         return 0
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
-        system_deps="git vim colordiff xdotool wmctrl mawk gawk"
+        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag the_silver_searcher"
         return 0
 
     elif [[ "$(expr substr "$(uname -s)" 1 9)" == "CYGWIN_NT" ]]; then
         platform="cygwin"
-        system_deps=""
+        system_deps="git vim the_silver_searcher"
         return 0
 
     else
