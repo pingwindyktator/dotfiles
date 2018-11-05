@@ -38,7 +38,7 @@ call plug#end()
 
 " Fzf plugin
 autocmd StdinReadPre * let s:std_in=1
-let $FZF_DEFAULT_COMMAND = 'ag --ignore-case --hidden --ignore={.git,node_modules,vendor} -l -g ""'
+let $FZF_DEFAULT_COMMAND = 'ag --ignore-case --hidden --ignore={.git,node_modules,vendor,.idea} -l -g ""'
 map ; :Files<CR>
 
 " NerdTree plugin
