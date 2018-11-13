@@ -33,6 +33,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+Plug 'ekalinin/Dockerfile.vim'
 
 call plug#end()
 
