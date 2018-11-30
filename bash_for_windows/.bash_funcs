@@ -54,7 +54,8 @@ extract () {
 
 # get current status of git repo
 parse_git_dirty () {
-	status=`git status 2>&1 | tee`
+	# /usr/bin/git is extremally slow on windows, windows-native git seems to work much better
+	status=`git.exe status 2>&1 | tee`
 	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
 	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
 	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
@@ -90,7 +91,8 @@ parse_git_dirty () {
 
 # get current branch in git repo
 parse_git_branch () {
-	BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g')
+	# /usr/bin/git is extremally slow on windows, windows-native git seems to work much better
+	BRANCH=$(git.exe branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g')
 	if [ ! "${BRANCH}" == "" ]
 	then
 		STAT=$(parse_git_dirty)
