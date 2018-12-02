@@ -27,7 +27,7 @@ extract () {
     do
       if [ -f "$n" ] ; then
           case "${n%,}" in
-            *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar) 
+            *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar)
                          tar xvf "$n"       ;;
             *.lzma)      unlzma ./"$n"      ;;
             *.bz2)       bunzip2 ./"$n"     ;;
@@ -52,10 +52,19 @@ extract () {
   fi
 }
 
+__wsl_git () {
+    # /usr/bin/git is extremally slow on windows, windows-native git seems to work much better
+    REALPATH=`readlink -f ${PWD}`
+    if [ "${REALPATH:0:5}" == "/mnt/" ] && [ -n "$(command -v git.exe)" ]; then
+        git.exe "${@}"
+    else
+        git "${@}"
+    fi
+}
+
 # get current status of git repo
 parse_git_dirty () {
-	# /usr/bin/git is extremally slow on windows, windows-native git seems to work much better
-	status=`git.exe status 2>&1 | tee`
+	status=`__wsl_git status 2>&1 | tee`
 	dirty=`echo -n "${status}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
 	untracked=`echo -n "${status}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
 	ahead=`echo -n "${status}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
@@ -91,8 +100,7 @@ parse_git_dirty () {
 
 # get current branch in git repo
 parse_git_branch () {
-	# /usr/bin/git is extremally slow on windows, windows-native git seems to work much better
-	BRANCH=$(git.exe branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g')
+	BRANCH=$(__wsl_git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/' | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g')
 	if [ ! "${BRANCH}" == "" ]
 	then
 		STAT=$(parse_git_dirty)
