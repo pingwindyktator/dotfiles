@@ -109,7 +109,7 @@ backup_existing_files() {
 
 view_diff() {
     cd "${update_dir}/${platform}" > /dev/null || return
-    find . -type f | xargs -i diff "{}" "${HOME}/{}" 2> /dev/null
+    find . -type f | xargs -i colordiff -y "${HOME}/{}" "{}" 2> /dev/null
 }
 
 preinstall() {
