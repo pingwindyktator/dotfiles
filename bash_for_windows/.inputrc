@@ -44,37 +44,40 @@
 "\eOH": beginning-of-line
 "\eOF": end-of-line
 
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[C": forward-char
+"\e[D": backward-char
+
 # Allow 8-bit input/output
 #set meta-flag on
 #set convert-meta off
 #set input-meta on
 #set output-meta on
-#$if Bash
-  # Don't ring bell on completion
-  set bell-style none
 
-  # or, don't beep at me - show me
-  #set bell-style visible
+# Don't ring bell on completion
+set bell-style none
 
-  # Filename completion/expansion
-  #set completion-ignore-case on
-  #set show-all-if-ambiguous on
+# or, don't beep at me - show me
+#set bell-style visible
 
-  # Expand homedir name
-  #set expand-tilde on
+# Filename completion/expansion
+set show-all-if-ambiguous on
 
-  # Append "/" to all dirnames
-  #set mark-directories on
-  #set mark-symlinked-directories on
+# Expand homedir name
+#set expand-tilde on
 
-  # Match all files
-  #set match-hidden-files on
+# Append "/" to all dirnames
+set mark-directories on
+set mark-symlinked-directories on
 
-  # 'Magic Space'
-  # Insert a space character then performs
-  # a history expansion in the line
-  #Space: magic-space
-#$endif
+# Match all files
+#set match-hidden-files on
+
+# 'Magic Space'
+# Insert a space character then performs
+# a history expansion in the line
+Space: magic-space
 
 # case-insensitiv bash autocompletion
 # it's cool since windows' NTFS is case insensitive
