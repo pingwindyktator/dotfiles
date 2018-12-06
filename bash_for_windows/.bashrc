@@ -39,9 +39,6 @@ shopt -s cdable_vars
 # Prevent file overwrite on stdout redirection
 # Use `>|` to force redirection to an existing file
 set -o noclobber
-# Enable history expansion with space
-# E.g. typing !!<space> will replace the !! with your last command
-bind Space:magic-space
 # Use case-insensitive filename globbing
 shopt -s nocaseglob
 
