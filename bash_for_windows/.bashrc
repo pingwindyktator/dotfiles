@@ -1,5 +1,10 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
+if (( ${BASH_VERSION%%.*} < 4 )) ; then
+    >&2 echo "Requires bash version 4.0.0 or higher, you've got ${BASH_VERSION}"
+    return
+fi
+
 case $- in
     *i*) ;;
       *) return;;
@@ -20,49 +25,47 @@ PS_CMD_PROMPT="\\$"
 PS_HOSTNAME="\H"
 PS_PWD="\w"
 
-HISTCONTROL=ignoredups
+# Append to the history file, don't overwrite it
 shopt -s histappend
+# Append to the history file, don't overwrite it
 shopt -s cmdhist
-HISTSIZE=500000
-HISTFILESIZE=100000
-
-export VISUAL=vim
-export EDITOR="$VISUAL"
-export GPG_TTY=$(tty)
-
+# Prepend cd to directory names automatically
+shopt -s autocd 2> /dev/null
+# Update window size after every command
+shopt -s checkwinsize
+# This allows you to bookmark your favorite places across the file system
+# Define a variable containing a path and you will be able to cd into it regardless of the directory you're in
+shopt -s cdable_vars
+# Prevent file overwrite on stdout redirection
+# Use `>|` to force redirection to an existing file
+set -o noclobber
+# Enable history expansion with space
+# E.g. typing !!<space> will replace the !! with your last command
+bind Space:magic-space
 # Use case-insensitive filename globbing
 shopt -s nocaseglob
 
-shopt -s checkwinsize
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+HISTCONTROL=ignoredups; HISTCONTROL="erasedups:ignoreboth"
+HISTTIMEFORMAT='%F %T '
+HISTSIZE=500000
+HISTFILESIZE=100000
+export VISUAL=vim
+export EDITOR="${VISUAL}"
+export GPG_TTY="$(tty)"
 
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+[ -x "/usr/bin/lesspipe" ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+if [ -z "${debian_chroot:-}" ] && [ -r "/etc/debian_chroot" ]; then
+    debian_chroot="$(cat /etc/debian_chroot)"
 fi
-
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
 
 force_color_prompt=yes
 
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	color_prompt=yes
-    else
-	color_prompt=
-    fi
+if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    color_prompt=yes
+else
+    color_prompt=
 fi
-
-unset color_prompt force_color_prompt
-
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
@@ -122,7 +125,7 @@ export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YE
 # export PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 
 # dotnet
-# export DOTNET_CLI_TELEMETRY_OPTOUT=1
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
 # export PATH="${HOME}/.dotnet/tools${PATH:+:${PATH}}"
 
 # docker
