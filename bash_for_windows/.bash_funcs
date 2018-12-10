@@ -15,6 +15,12 @@ command_not_found_handle () {
   fi
 }
 
+async_run () {
+  {
+    eval "$@" &> /dev/null
+  }&
+}
+
 # https://github.com/xvoland/Extract
 extract () {
   if [ -z "$1" ]; then
