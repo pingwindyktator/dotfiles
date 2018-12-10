@@ -1,3 +1,7 @@
+transfersh () {
+    curl --progress-bar --upload-file "$1" https://transfer.sh/$(basename $1) | tee /dev/null;
+}
+
 async_run () {
   {
     eval "$@" &> /dev/null
