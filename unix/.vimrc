@@ -34,6 +34,10 @@ Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'ekalinin/Dockerfile.vim'
+Plug 'haya14busa/incsearch.vim'
+Plug 'Raimondi/delimitMate'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-surround'
 
 call plug#end()
 
@@ -47,6 +51,16 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
+
+" Use a blinking upright bar cursor in Insert mode, a blinking block in normal
+if &term == 'xterm-256color' || &term == 'screen-256color'
+    let &t_SI = "\<Esc>[5 q"
+    let &t_EI = "\<Esc>[1 q"
+endif
+if exists('$TMUX')
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+endif
 
 cmap w!! SudoWrite
 nmap <silent> <A-Up> :wincmd k<CR>
