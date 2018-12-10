@@ -1,3 +1,9 @@
+async_run () {
+  {
+    eval "$@" &> /dev/null
+  }&
+}
+
 # https://github.com/xvoland/Extract
 extract () {
   if [ -z "$1" ]; then
