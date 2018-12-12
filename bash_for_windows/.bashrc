@@ -10,21 +10,6 @@ case $- in
       *) return;;
 esac
 
-# PS1 switches
-PS_RESET='\[\033[0m\]'
-PS_RED='\[\033[1;31m\]'
-PS_GREEN='\[\033[1;32m\]'
-PS_YELLOW='\[\033[1;33m\]'
-PS_PURPLE='\[\033[1;35m\]'
-PS_WHITE='\[\033[1;37m\]'
-PS_BLUE='\[\033[1;34m\]'
-PS_CYAN='\[\033[1;36m\]'
-PS_CLOCK="\A"
-PS_USERNAME="\u"
-PS_CMD_PROMPT="\\$"
-PS_HOSTNAME="\H"
-PS_PWD="\w"
-
 # Append to the history file, don't overwrite it
 shopt -s histappend
 # Append to the history file, don't overwrite it
@@ -90,7 +75,25 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YELLOW}${PS_PWD}${PS_BLUE}\`parse_git_branch\`${PS_WHITE}${PS_CMD_PROMPT} ${PS_RESET}"
+PROMPT_COMMAND=__prompt_command
+
+__prompt_command() {
+    local PS_RESET='\[\033[0m\]'
+    local PS_RED='\[\033[1;31m\]'
+    local PS_GREEN='\[\033[1;32m\]'
+    local PS_YELLOW='\[\033[1;33m\]'
+    local PS_PURPLE='\[\033[1;35m\]'
+    local PS_WHITE='\[\033[1;37m\]'
+    local PS_BLUE='\[\033[1;34m\]'
+    local PS_CYAN='\[\033[1;36m\]'
+    local PS_CLOCK="\A"
+    local PS_USERNAME="\u"
+    local PS_CMD_PROMPT="\\$"
+    local PS_HOSTNAME="\H"
+    local PS_PWD="\w"
+
+    export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YELLOW}${PS_PWD}${PS_BLUE}$(parse_git_branch)${PS_WHITE}${PS_CMD_PROMPT} ${PS_RESET}"
+}
 
 # pyenv
 # export PYENV_VIRTUALENV_DISABLE_PROMPT=1
