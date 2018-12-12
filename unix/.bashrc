@@ -76,6 +76,9 @@ fi
 PROMPT_COMMAND=__prompt_command
 
 __prompt_command() {
+    local EXIT="$?"  # This needs to be first
+    PS1=""
+
     local PS_RESET='\[\033[0m\]'
     local PS_RED='\[\033[1;31m\]'
     local PS_GREEN='\[\033[1;32m\]'
@@ -90,7 +93,13 @@ __prompt_command() {
     local PS_HOSTNAME="\H"
     local PS_PWD="\w"
 
-    export PS1="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YELLOW}${PS_PWD}${PS_BLUE}$(parse_git_branch)${PS_WHITE}${PS_CMD_PROMPT} ${PS_RESET}"
+    if [ $EXIT != 0 ]; then
+       PS1+="${PS_RED}[✕]"
+    else
+       PS1+="${PS_GREEN}[✔]"
+    fi
+
+    export PS1+="${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YELLOW}${PS_PWD}${PS_BLUE}$(parse_git_branch)${PS_WHITE}${PS_CMD_PROMPT} ${PS_RESET}"
 }
 
 # pyenv
