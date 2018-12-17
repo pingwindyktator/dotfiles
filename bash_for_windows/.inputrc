@@ -29,35 +29,37 @@
 "\e[D": backward-char
 
 # Allow 8-bit input/output
-#set meta-flag on
-#set convert-meta off
-#set input-meta on
-#set output-meta on
+# set meta-flag on
+# set convert-meta off
+# set input-meta on
+# set output-meta on
 
-# Don't ring bell on completion
-set bell-style none
+$if Bash
+    # Don't ring bell on completion
+    set bell-style none
 
-# or, don't beep at me - show me
-#set bell-style visible
+    # or, don't beep at me - show me
+    # set bell-style visible
 
-# Filename completion/expansion
-set show-all-if-ambiguous on
+    # Filename completion/expansion
+    set show-all-if-ambiguous on
 
-# Expand homedir name
-#set expand-tilde on
+    # Expand homedir name
+    # set expand-tilde on
 
-# Append "/" to all dirnames
-set mark-directories on
-set mark-symlinked-directories on
+    # Append "/" to all dirnames
+    set mark-directories on
+    set mark-symlinked-directories on
 
-# Match all files
-#set match-hidden-files on
+    # Match all files
+    # set match-hidden-files on
 
-# 'Magic Space'
-# Insert a space character then performs
-# a history expansion in the line
-Space: magic-space
-
-# case-insensitiv bash autocompletion
-# it's cool since windows' NTFS is case insensitive
-set completion-ignore-case On
+    # 'Magic Space'
+    # Insert a space character then performs
+    # a history expansion in the line
+    Space: magic-space
+    
+    # case-insensitiv bash autocompletion
+    # it's cool since windows' NTFS is case insensitive
+    set completion-ignore-case On
+$endif
