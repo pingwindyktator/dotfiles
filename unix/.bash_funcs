@@ -197,3 +197,11 @@ setgcc () {
         *)                 __setgcc_set  "${@}"
     esac
 }
+
+docker_remove_all () {
+    docker stop $(docker ps -qa)              2>/dev/null || return  # Stop all containers
+    docker rm $(docker ps -qa)                2>/dev/null            # Remove all containers
+    docker rmi -f $(docker images -qa)        2>/dev/null            # Remove all images
+    docker volume rm $(docker volume ls -qf)  2>/dev/null            # Remove all volumes
+    docker network rm $(docker network ls -q) 2>/dev/null            # Remove all networks
+}
