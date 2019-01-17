@@ -208,3 +208,9 @@ docker_remove_all () {
     docker volume rm $(docker volume ls -qf)  2>/dev/null  # Remove all volumes
     docker network rm $(docker network ls -q) 2>/dev/null  # Remove all networks
 }
+
+docker_stop_all () {
+    if [[ $(docker ps -qa) ]]; then
+        docker stop $(docker ps -qa) 2>/dev/null
+    fi
+}
