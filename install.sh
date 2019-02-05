@@ -143,17 +143,14 @@ detect_platform() {
     if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
         system_deps="git vim colordiff mawk gawk silversearcher-ag"
-        return 0
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
         system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag"
-        return 0
 
     elif [[ "$(expr substr "$(uname -s)" 1 9)" == "CYGWIN_NT" ]]; then
         platform="cygwin"
         system_deps="git vim the_silver_searcher"
-        return 0
 
     else
         >&2 echo "Unknown platform"
@@ -166,8 +163,6 @@ assert_compatibility() {
         >&2 echo "Requires git version 1.7.0 or higher, you've got $(git --version | awk '{print $3}')"
         return 1
     fi
-    
-    return 0
 }
 
 main() {
