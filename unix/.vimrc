@@ -38,6 +38,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
+Plug 'fidian/hexmode'
 
 call plug#end()
 
@@ -52,6 +53,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 map <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
+cmap hex Hexmode
 cmap w!! SudoWrite
 nmap <silent> <A-Up> :wincmd k<CR>
 nmap <silent> <A-Down> :wincmd j<CR>
