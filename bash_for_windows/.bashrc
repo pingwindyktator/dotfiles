@@ -109,14 +109,14 @@ __prompt_command() {
     export PS1="${PS_EXIT}${PS_BLUE}[${PS_CLOCK}] ${PS_GREEN}${PS_USERNAME}${PS_WHITE}:${PS_YELLOW}${PS_PWD}${PS_BLUE}$(parse_git_branch)${PS_BREAK}${PS_WHITE}${PS_CMD_PROMPT} ${PS_RESET}"
 }
 
-if [ -z "${DOTFILES_PYENV_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_PYENV_SUPPORT+x}" ]; then
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
     export PATH="${HOME}/.pyenv/bin:${PATH}"
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 fi
 
-if [ -z "${DOTFILES_CUDA_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_CUDA_SUPPORT+x}" ]; then
     export CUDA_HOME="/usr/local/cuda"
     export PATH="${CUDA_HOME}/bin${PATH:+:${PATH}}"
     export C_INCLUDE_PATH="${CUDA_HOME}/include:${C_INCLUDE_PATH}"
@@ -125,30 +125,30 @@ if [ -z "${DOTFILES_CUDA_SUPPORT+x}" ]; then
     export CUDACXX=$(which nvcc)
 fi
 
-if [ -z "${DOTFILES_NVM_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_NVM_SUPPORT+x}" ]; then
     export NVM_DIR="${HOME}/.nvm"
     [ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"  # This loads nvm
     [ -s "${NVM_DIR}/bash_completion" ] && \. "${NVM_DIR}/bash_completion"  # This loads nvm bash_completion
 fi
 
-if [ -z "${DOTFILES_THEFUCK_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_THEFUCK_SUPPORT+x}" ]; then
     eval $(thefuck --alias)
     eval $(thefuck --alias FUCK)
 fi
 
-if [ -z "${DOTFILES_GOLANG_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_GOLANG_SUPPORT+x}" ]; then
     export GOROOT="/usr/local/go"
     export GOPATH="${HOME}/Sources/go"
     export PATH="${GOROOT}/bin${PATH:+:${PATH}}"
     export PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 fi
 
-if [ -z "${DOTFILES_DOTNET_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_DOTNET_SUPPORT+x}" ]; then
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
     export PATH="${HOME}/.dotnet/tools${PATH:+:${PATH}}"
 fi
 
-if [ -z "${DOTFILES_DOCKER_SUPPORT+x}" ]; then
+if [ ! -z "${DOTFILES_DOCKER_SUPPORT+x}" ]; then
     export PATH="${HOME}/bin:${HOME}/.local/bin:${PATH}"
     export PATH="${PATH}:/mnt/c/Program\ Files/Docker/Docker/resources/bin"
     alias docker='docker.exe'
