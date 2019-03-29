@@ -31,6 +31,7 @@
     ls = ls-files
     initsign = "! ~/bin/init_git_sign_repo"
     resettags = "! git tag -l | xargs git tag -d && git fetch --tags"
+    branchtime = "! git for-each-ref --sort='-committerdate:iso8601' --format='%(authordate:relative)|%(authorname)|%(refname)' refs/remotes | column -t -s'|'"
 
 [gpg]
     program = gpg2
