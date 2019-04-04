@@ -94,3 +94,6 @@ nmap <silent> <A-Right> :wincmd l<CR>
 nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
 let g:airline#extensions#tabline#enabled = 1
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
+nnoremap <C-X> :bdelete<CR>
