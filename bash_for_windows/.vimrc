@@ -93,3 +93,4 @@ nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
 nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
+let g:airline#extensions#tabline#enabled = 1
