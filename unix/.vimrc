@@ -9,6 +9,14 @@ set nocp
 set nu
 set hlsearch
 set updatetime=100
+set hidden
+set history=1000
+set wildmenu
+set title
+set visualbell
+set autoindent
+set smartindent
+syntax on
 
 " Plug plugin manager
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -30,6 +38,7 @@ Plug 'tpope/vim-sensible'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-eunuch'
@@ -41,6 +50,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'fidian/hexmode'
 Plug 'airblade/vim-gitgutter'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 call plug#end()
 
@@ -64,7 +74,7 @@ function! s:tags()
     call system('ctags -R -a -f .ctags')
   endif
 
-  call fzf#run({
+call fzf#run({
   \ 'source':  'cat '.join(map(tagfiles(), 'fnamemodify(v:val, ":S")')).
   \            '| grep -v -a ^!',
   \ 'options': '+m -d "\t" --with-nth 1,4.. -n 1 --tiebreak=index',
@@ -84,6 +94,21 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 map <silent> <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.swp$']
+autocmd VimEnter * NERDTree | wincmd p
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+
+if has('persistent_undo')
+  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  set undodir=~/.vim/backups
+  set undofile
+endif
+
+" airline plugin
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
 
 cmap hex Hexmode
 cmap w!! SudoWrite
@@ -93,7 +118,6 @@ nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
 nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
-let g:airline#extensions#tabline#enabled = 1
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <C-X> :bdelete<CR>
