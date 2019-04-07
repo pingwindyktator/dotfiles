@@ -16,6 +16,7 @@ set title
 set visualbell
 set autoindent
 set smartindent
+autocmd StdinReadPre * let s:std_in=1
 syntax on
 
 " Plug plugin manager
@@ -50,13 +51,20 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'fidian/hexmode'
 Plug 'airblade/vim-gitgutter'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 call plug#end()
 
-" Fzf plugin
-autocmd StdinReadPre * let s:std_in=1
+" Deoplete plugin
+let g:deoplete#enable_at_startup = 1
 
+" Fzf plugin
 function! s:tags_sink(line)
   let parts = split(a:line, '\t\zs')
   let excmd = matchstr(parts[2:], '^.*\ze;"\t')
@@ -89,15 +97,21 @@ map ; :Files<CR>
 map ' :Tags<CR>
 
 " NerdTree plugin
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif  " automatically close a tab if the only remaining window is NerdTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-map <silent> <C-n> :NERDTreeToggle<CR>
+autocmd VimEnter * NERDTree | wincmd p  " open at startup
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.swp$']
-autocmd VimEnter * NERDTree | wincmd p
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
+let g:nerdtree_tabs_focus_on_files=1
+map <silent> <C-n> :NERDTreeToggle<CR>
+
+" airline plugin
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+
 
 if has('persistent_undo')
   silent !mkdir ~/.vim/backups > /dev/null 2>&1
@@ -105,10 +119,9 @@ if has('persistent_undo')
   set undofile
 endif
 
-" airline plugin
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-
+if !has('nvim')        
+    set ttymouse=xterm2
+endif                  
 
 cmap hex Hexmode
 cmap w!! SudoWrite
@@ -120,4 +133,3 @@ nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
-nnoremap <C-X> :bdelete<CR>
