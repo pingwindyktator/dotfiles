@@ -79,8 +79,8 @@ call fzf#run({
 endfunction
 
 command! Tags call s:tags()
-let $FZF_DEFAULT_COMMAND = 'ag --ignore-case --hidden --ignore={.git,node_modules,vendor,.idea} -l -g ""'
 set tags=.ctags
+let $FZF_DEFAULT_COMMAND = 'ag --ignore-case --hidden --ignore={.git,node_modules,vendor,.idea} -l -g ""'
 map ; :Files<CR>
 map ' :Tags<CR>
 
