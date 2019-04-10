@@ -142,11 +142,11 @@ postinstall() {
 detect_platform() {
     if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
-        system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags"
+        system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline"
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
-        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag exuberant-ctags"
+        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag exuberant-ctags fonts-powerline"
 
     elif [[ "$(expr substr "$(uname -s)" 1 9)" == "CYGWIN_NT" ]]; then
         platform="cygwin"
