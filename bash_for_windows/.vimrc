@@ -41,6 +41,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
+Plug 'jistr/vim-nerdtree-tabs'
 Plug 'farmergreg/vim-lastplace'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -84,19 +85,15 @@ endfunction
 command! Tags call s:tags()
 set tags=.ctags
 let $FZF_DEFAULT_COMMAND = 'ag --ignore-case --hidden --ignore={.git,node_modules,vendor,.idea} -l -g ""'
-map ; :Files<CR>
-map ' :Tags<CR>
 
 " NerdTree plugin
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif  " automatically close a tab if the only remaining window is NerdTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd VimEnter * NERDTree | wincmd p  " open at startup
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.swp$']
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let g:nerdtree_tabs_focus_on_files=1
-map <silent> <C-n> :NERDTreeToggle<CR>
+let g:nerdtree_tabs_autofind=1
+let g:nerdtree_tabs_open_on_console_startup=1
 
 " airline plugin
 let g:airline#extensions#tabline#enabled = 1
@@ -116,9 +113,13 @@ else
     set guicursor=a:ver100-blinkon0,i-ci-sm-c:ver100-blinkon1
 endif
 
-
+map ; :Files<CR>
+map ' :Tags<CR>
+map <silent> <C-n> :NERDTreeTabsToggle<CR>
 cmap hex Hexmode
 cmap w!! SudoWrite
+cmap x Sbd
+cmap x! Sbdm
 nmap <silent> <A-Up> :wincmd k<CR>
 nmap <silent> <A-Down> :wincmd j<CR>
 nmap <silent> <A-Left> :wincmd h<CR>
@@ -127,8 +128,6 @@ nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
-cmap x Sbd
-cmap x! Sbdm
 let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[6 q"
 let &t_EI = "\<Esc>[6 q"
