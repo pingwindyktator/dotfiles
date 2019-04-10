@@ -52,6 +52,8 @@ Plug 'tpope/vim-surround'
 Plug 'fidian/hexmode'
 Plug 'airblade/vim-gitgutter'
 
+call plug#end()
+
 " Fzf plugin
 function! s:tags_sink(line)
   let parts = split(a:line, '\t\zs')
@@ -121,3 +123,6 @@ nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[6 q"
+let &t_EI = "\<Esc>[6 q"
