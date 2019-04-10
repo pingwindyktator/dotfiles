@@ -101,7 +101,7 @@ let g:airline_powerline_fonts = 1
 
 
 
-if has('persistent_undo')
+if has('persistent_undo')  " Keep backups in one place making undo work cross sessions
   silent !mkdir ~/.vim/backups > /dev/null 2>&1
   set undodir=~/.vim/backups
   set undofile
@@ -116,18 +116,23 @@ endif
 map ; :Files<CR>
 map ' :Tags<CR>
 map <silent> <C-n> :NERDTreeTabsToggle<CR>
+map <silent> <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>  " Open tag definition in a new tab
+
 cmap hex Hexmode
 cmap w!! SudoWrite
-cmap x Sbd
-cmap x! Sbdm
+cmap x Sbd  " Close buffer
+cmap x! Sbdm  " Force close buffer
+
 nmap <silent> <A-Up> :wincmd k<CR>
 nmap <silent> <A-Down> :wincmd j<CR>
 nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
-nmap <silent> <C-S-Up> :m-2<CR>
-nmap <silent> <C-S-Down> :m+<CR>
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
-let &t_SI = "\<Esc>[6 q"
-let &t_SR = "\<Esc>[6 q"
-let &t_EI = "\<Esc>[6 q"
+nmap <silent> <C-S-Up> :m-2<CR>        " Move line up
+nmap <silent> <C-S-Down> :m+<CR>       " Move line down
+
+nnoremap <silent> <Tab> :bnext<CR>        " Next buffer
+nnoremap <silent> <S-Tab> :bprevious<CR>  " Prev buffer
+
+let &t_SI = "\<Esc>[6 q"  " Cursor shape
+let &t_SR = "\<Esc>[6 q"  " Cursor shape
+let &t_EI = "\<Esc>[6 q"  " Cursor shape
