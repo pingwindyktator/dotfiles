@@ -51,6 +51,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'fidian/hexmode'
 Plug 'airblade/vim-gitgutter'
+Plug 'cespare/vim-sbd'
 
 call plug#end()
 
@@ -111,7 +112,10 @@ endif
 
 if !has('nvim')        
     set ttymouse=xterm2
-endif                  
+else
+    set guicursor=a:ver100-blinkon0,i-ci-sm-c:ver100-blinkon1
+endif
+
 
 cmap hex Hexmode
 cmap w!! SudoWrite
@@ -123,6 +127,8 @@ nmap <silent> <C-S-Up> :m-2<CR>
 nmap <silent> <C-S-Down> :m+<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
+cmap x Sbd
+cmap x! Sbdm
 let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[6 q"
 let &t_EI = "\<Esc>[6 q"
