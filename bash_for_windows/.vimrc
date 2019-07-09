@@ -120,8 +120,8 @@ map <silent> <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>  " Open tag
 
 cmap hex Hexmode
 cmap w!! SudoWrite
-cmap x Sbd  " Close buffer
-cmap x! Sbdm  " Force close buffer
+" cmap x Sbd  " Close buffer
+" cmap x! Sbdm  " Force close buffer
 
 nmap <silent> <A-Up> :wincmd k<CR>
 nmap <silent> <A-Down> :wincmd j<CR>
