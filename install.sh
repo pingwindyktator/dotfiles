@@ -94,6 +94,9 @@ generic_install() {
     
     # Copy files to $HOME
     find . -type f | xargs -i cp "{}" "${HOME}/{}"
+    
+    # install vim plug
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 }
 
 backup_existing_files() {
@@ -134,19 +137,17 @@ preinstall() {
 
 postinstall() {
     rm -rf "${update_dir}"
-    
-    # No need for `sudo` anymore
-    sudo -k
+    sudo -k  # No need for `sudo` anymore
 }
 
 detect_platform() {
     if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
         platform="bash_for_windows"
-        system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline"
+        system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl"
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
-        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag exuberant-ctags fonts-powerline"
+        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl"
 
     elif [[ "$(expr substr "$(uname -s)" 1 9)" == "CYGWIN_NT" ]]; then
         platform="cygwin"
