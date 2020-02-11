@@ -25,10 +25,10 @@ shopt -s cdable_vars
 # Use `>|` to force redirection to an existing file
 set -o noclobber
 
-HISTCONTROL=ignoredups; HISTCONTROL="erasedups:ignoreboth"
-HISTTIMEFORMAT='%F %T '
-HISTSIZE=500000
-HISTFILESIZE=100000
+export HISTCONTROL=ignoredups; HISTCONTROL="erasedups:ignoreboth"
+export HISTTIMEFORMAT="[%F %T] "
+export HISTSIZE=10000
+export HISTFILESIZE=1000000
 export VISUAL=vim
 export EDITOR="${VISUAL}"
 export GPG_TTY="$(tty)"
