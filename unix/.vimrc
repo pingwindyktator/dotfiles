@@ -11,6 +11,7 @@ set hlsearch
 set updatetime=100
 set hidden
 set history=1000
+set titleold=
 set wildmenu
 set title
 set visualbell
