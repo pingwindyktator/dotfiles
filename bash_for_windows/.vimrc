@@ -13,6 +13,7 @@ set hidden
 set history=1000
 set wildmenu
 set title
+set titleold=
 set visualbell
 set autoindent
 set smartindent
