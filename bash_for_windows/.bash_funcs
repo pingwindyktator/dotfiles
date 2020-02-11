@@ -1,4 +1,5 @@
 command_not_found_handle () {
+  cd "$(dirname "$(which cmd.exe)")"
   if cmd.exe /c "(where $1 || (help $1 |findstr /V Try)) >nul 2>nul && ($* || exit 0)"; then
     return $?
   else
