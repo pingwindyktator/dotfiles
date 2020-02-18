@@ -145,3 +145,8 @@ if [ ! -z "${DOTFILES_DOTNET_SUPPORT+x}" ]; then
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
     export PATH="${HOME}/.dotnet/tools${PATH:+:${PATH}}"
 fi
+
+if [ ! -z "${DOTFILES_RVM_SUPPORT+x}" ]; then
+    export PATH="${HOME}/.rvm/bin${PATH:+:${PATH}}"
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
+fi
