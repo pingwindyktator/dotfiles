@@ -51,6 +51,10 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 PROMPT_COMMAND="__prompt_command; "
 
+if [ -f ~/.privaterc ]; then
+  . ~/.privaterc
+fi
+
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -59,12 +63,8 @@ if [ -f ~/.bash_funcs ]; then
   . ~/.bash_funcs
 fi
 
-if [ -f ~/.privaterc ]; then
-  . ~/.privaterc
-fi
-
 if [ -f ~/.pythonrc ]; then
-  export PYTHONSTARTUP=~/.pythonrc
+  export PYTHONSTARTUP="~/.pythonrc"
 fi
 
 if ! shopt -oq posix; then
@@ -74,6 +74,15 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi 
 
 __prompt_command() {
     local EXIT="$?"  # This needs to be first
