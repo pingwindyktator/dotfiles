@@ -1,29 +1,21 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
+# Exit if non-interactive mode
+[[ $- == *i* ]] || return 0
+
 if (( ${BASH_VERSION%%.*} < 4 )) ; then
     >&2 echo "Requires bash version 4.0.0 or higher, you've got ${BASH_VERSION}"
     return
 fi
 
-case $- in
-    *i*) ;;
-      *) return;;
-esac
-
-# Append to the history file, don't overwrite it
-shopt -s histappend
-# Append to the history file, don't overwrite it
-shopt -s cmdhist
-# Prepend cd to directory names automatically
-shopt -s autocd 2> /dev/null
-# Update window size after every command
-shopt -s checkwinsize
-# This allows you to bookmark your favorite places across the file system
-# Define a variable containing a path and you will be able to cd into it regardless of the directory you're in
-shopt -s cdable_vars
-# Prevent file overwrite on stdout redirection
-# Use `>|` to force redirection to an existing file
-set -o noclobber
+shopt -s histappend          # Append to the history file, don't overwrite it
+shopt -s cmdhist             # Append to the history file, don't overwrite it
+shopt -s autocd 2> /dev/null # Prepend cd to directory names automatically
+shopt -s checkwinsize        # Update window size after every command
+shopt -s cdable_vars         # This allows you to bookmark your favorite places across the file system,
+                             # define a variable containing a path and you will be able to cd into it regardless of the directory you're in
+set -o noclobber             # Prevent file overwrite on stdout redirection,
+                             # use `>|` to force redirection to an existing file
 
 export HISTCONTROL=ignoredups; HISTCONTROL="erasedups:ignoreboth"
 export HISTTIMEFORMAT="[%F %T] "
@@ -49,23 +41,14 @@ fi
 
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-PROMPT_COMMAND="__prompt_command; "
+[ -f ~/.privaterc ] && . ~/.privaterc
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
+[ -f ~/.bash_funcs ] && . ~/.bash_funcs
+[ -f ~/.pythonrc ] && export PYTHONSTARTUP="~/.pythonrc"
 
-if [ -f ~/.privaterc ]; then
-  . ~/.privaterc
-fi
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-if [ -f ~/.bash_funcs ]; then
-  . ~/.bash_funcs
-fi
-
-if [ -f ~/.pythonrc ]; then
-  export PYTHONSTARTUP="~/.pythonrc"
-fi
 
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -75,14 +58,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi 
+export PROMPT_COMMAND="__prompt_command; "
 
 __prompt_command() {
     local EXIT="$?"  # This needs to be first
