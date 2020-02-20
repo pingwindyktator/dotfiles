@@ -120,7 +120,7 @@ map <silent> <C-n> :NERDTreeTabsToggle<CR>
 map <silent> <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>  " Open tag definition in a new tab
 
 cmap hex Hexmode
-cmap w!! SudoWrite
+cmap w!! execute 'silent! SudoWrite' <bar> edit!
 " cmap x Sbd  " Close buffer
 " cmap x! Sbdm  " Force close buffer
 
