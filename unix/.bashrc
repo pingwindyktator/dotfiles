@@ -44,7 +44,7 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 [ -f ~/.privaterc ] && . ~/.privaterc
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 [ -f ~/.bash_funcs ] && . ~/.bash_funcs
-[ -f ~/.pythonrc ] && export PYTHONSTARTUP="~/.pythonrc"
+[ -f ~/.pythonrc ] && export PYTHONSTARTUP="${HOME}/.pythonrc"
 
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
