@@ -16,7 +16,7 @@ fi
 for window_id in $windows_ids; do
     pid=$(xdotool getwindowpid $window_id)
     command=$(ps -p $pid -o args | tail -1 )
-    if [[ $command == *"term"* ]]; then
+    if [[ $command == *"terminal"* ]]; then
         term_windows_ids="$term_windows_ids $window_id"
     fi
 done
