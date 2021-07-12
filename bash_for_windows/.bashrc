@@ -25,6 +25,7 @@ export HISTFILESIZE=1000000
 export VISUAL=vim
 export EDITOR="${VISUAL}"
 export GPG_TTY="$(tty)"
+export WINHOME="$(wslpath "$(cmd.exe /c "<nul set /p=%UserProfile%" 2>/dev/null)")"
 
 [ -x "/usr/bin/lesspipe" ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -122,7 +123,7 @@ fi
 
 if [ ! -z "${DOTFILES_GOLANG_SUPPORT+x}" ]; then
     export GOROOT="/usr/local/go"
-    export GOPATH="${HOME}/Sources/go"
+    export GOPATH="${WINHOME}/Sources/go"
     export PATH="${GOROOT}/bin${PATH:+:${PATH}}"
     export PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 fi
