@@ -8,7 +8,7 @@ system_deps=""
 install_system_package() {
     [[ -z "${*// }" ]] && return 0
     
-    if [[ "${platform}" == "bash_for_windows" ]] || [[ "${platform}" == "unix" ]]; then        
+    if [[ "${platform}" == "wsl" ]] || [[ "${platform}" == "unix" ]]; then        
         if [ -n "$(command -v apt-get)" ]; then
             sudo apt-get update -qq && sudo apt-get install ${@} -y
         elif [ -n "$(command -v yum)" ]; then
@@ -130,7 +130,7 @@ postinstall() {
 
 detect_platform() {
     if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && ("$(uname -a)" == *"Microsoft"* || "$(uname -a)" == *"microsoft"*) ]]; then
-        platform="bash_for_windows"
+        platform="wsl"
         system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl"
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
