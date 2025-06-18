@@ -218,3 +218,4 @@ docker_stop_all () {
         docker stop $(docker ps -qa) 2>/dev/null
     fi
 }
+

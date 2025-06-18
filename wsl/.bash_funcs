@@ -121,6 +121,10 @@ parse_git_branch () {
 	fi
 }
 
+git_pull_tree () {
+    ls -d */ | xargs -I{} git -C {} pull
+}
+
 # This function defines a 'cd' replacement function capable of keeping,
 # displaying and accessing history of visited directories, up to 10 entries.
 # To use it, uncomment it, source this file and try 'cd --'.
@@ -184,5 +188,22 @@ weather () {
     location="${location}_${i}"
   done
   curl wttr.in/"${location}"
+}
+
+docker_remove_all () {
+    if [[ $(docker ps -qa) ]]; then
+        docker stop $(docker ps -qa) 2>/dev/null || return  # Stop all containers
+    fi
+
+    docker rm $(docker ps -qa)                2>/dev/null  # Remove all containers
+    docker rmi -f $(docker images -qa)        2>/dev/null  # Remove all images
+    docker volume rm $(docker volume ls -q)   2>/dev/null  # Remove all volumes
+    docker network rm $(docker network ls -q) 2>/dev/null  # Remove all networks
+}
+
+docker_stop_all () {
+    if [[ $(docker ps -qa) ]]; then
+        docker stop $(docker ps -qa) 2>/dev/null
+    fi
 }
 
