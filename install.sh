@@ -18,18 +18,6 @@ install_system_package() {
             return 1
         fi
         
-    elif [[ "${platform}" == "cygwin" ]]; then
-        if [ -n "$(command -v apt-cyg)" ]; then
-            apt-cyg update && apt-cyg install ${@}
-        elif [ -n "$(command -v cyg-apt)" ]; then
-            cyg-apt update && cyg-apt install ${@}
-        elif [ -n "$(command -v cyg-get)" ]; then
-            cyg-get ${@}
-        else
-            >&2 echo "Installing system packages currently not compatibile with your package manager"
-            return 1
-        fi
-        
     else
         >&2 echo "Unknown platform"
         return 1
@@ -141,17 +129,13 @@ postinstall() {
 }
 
 detect_platform() {
-    if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && "$(uname -a)" == *"Microsoft"* ]]; then
+    if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && ("$(uname -a)" == *"Microsoft"* || "$(uname -a)" == *"microsoft"*) ]]; then
         platform="bash_for_windows"
         system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl"
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
-        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl"
-
-    elif [[ "$(expr substr "$(uname -s)" 1 9)" == "CYGWIN_NT" ]]; then
-        platform="cygwin"
-        system_deps="git vim the_silver_searcher"
+        system_deps="git vim colordiff xdotool wmctrl mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl libnotify-bin"
 
     else
         >&2 echo "Unknown platform"
