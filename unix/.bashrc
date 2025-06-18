@@ -133,5 +133,9 @@ fi
 
 if [ ! -z "${DOTFILES_RVM_SUPPORT+x}" ]; then
     export PATH="${HOME}/.rvm/bin${PATH:+:${PATH}}"
-    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
+    [[ -s "${HOME}/.rvm/scripts/rvm" ]] && source "${HOME}/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
+fi
+
+if [ ! -z "${DOTFILES_RUST_SUPPORT+x}" ]; then
+    source "${HOME}/.cargo/env"
 fi
