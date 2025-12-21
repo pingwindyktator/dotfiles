@@ -131,7 +131,7 @@ postinstall() {
 detect_platform() {
     if [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" && ("$(uname -a)" == *"Microsoft"* || "$(uname -a)" == *"microsoft"*) ]]; then
         platform="wsl"
-        system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl"
+        system_deps="git vim colordiff mawk gawk silversearcher-ag exuberant-ctags fonts-powerline curl dos2unix"
 
     elif [[ "$(expr substr "$(uname -s)" 1 5)" == "Linux" ]]; then
         platform="unix"
