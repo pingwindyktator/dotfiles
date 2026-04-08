@@ -149,3 +149,6 @@ if [ ! -z "${DOTFILES_RUST_SUPPORT+x}" ]; then
     source "${HOME}/.cargo/env"
 fi
 
+if [ ! -z "${DOTFILES_FOUNDRY_SUPPORT+x}" ]; then
+    export PATH="${HOME}/.foundry/bin${PATH:+:${PATH}}"
+fi
