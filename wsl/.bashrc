@@ -121,11 +121,8 @@ if [ ! -z "${DOTFILES_THEFUCK_SUPPORT+x}" ]; then
     eval $(thefuck --alias FUCK)
 fi
 
-if [ ! -z "${DOTFILES_GOLANG_SUPPORT+x}" ]; then
-    export GOROOT="/usr/local/go"
-    export GOPATH="${WINHOME}/Sources/go"
-    export PATH="${GOROOT}/bin${PATH:+:${PATH}}"
-    export PATH="${GOPATH}/bin${PATH:+:${PATH}}"
+if [ ! -z "${DOTFILES_RUST_SUPPORT+x}" ]; then
+    . "$HOME/.cargo/env"
 fi
 
 if [ ! -z "${DOTFILES_DOTNET_SUPPORT+x}" ]; then
